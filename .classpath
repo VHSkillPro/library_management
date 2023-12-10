@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Code/Java/NgoVanHai/sqljdbc4-3.0.jar">
+	<classpathentry kind="lib" path="sqljdbc4-3.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
