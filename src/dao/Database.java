@@ -4,23 +4,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class Database {
-	private static String serverName = null;
-	private static String databaseName = null;
-	private static String username = null;
-	private static String password = null;
-	private static Connection conn = null; 
+	private static Database instance;
+	private static String serverName;
+	private static String databaseName;
+	private static String username;
+	private static String password;
+	private static Connection conn = null;
 	
-	public static void setDatabase(String serverName, String databaseName, String username, String password) {
-		Database.disconnect();
+	public Database(String serverName, String databaseName, String username, String password) {
 		Database.serverName = serverName;
 		Database.databaseName = databaseName;
 		Database.username = username;
 		Database.password = password;
+		Database.connect();
 	}
 	
+	public static Database getInstance(String serverName, String databaseName, String username, String password) {
+		if (instance == null) {
+			instance = new Database(serverName, databaseName, username, password);
+		}
+		return instance;
+	}
+
 	public static Boolean connect() {
 		try {
-			conn = DriverManager.getConnection("jdbc:sqlserver://" + serverName + ";databaseName=" + databaseName, username, password);
+			Database.conn = DriverManager.getConnection("jdbc:sqlserver://" + serverName + ";databaseName=" + databaseName, username, password);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
