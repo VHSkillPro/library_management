@@ -97,6 +97,7 @@ public class FormSignUp extends JFrame {
 		
 		// Password
 		validateForm.get(1).addElement(new ValidateElement<String>("Vui lòng nhập mật khẩu", str -> Validate.isExist(str)));
+		validateForm.get(1).addElement(new ValidateElement<String>("Mật khẩu phải dài hơn 6 ký tự", str -> str.length() >= 6));
 		
 		// Repassword
 		validateForm.get(2).addElement(new ValidateElement<String>("Vui lòng nhập lại mật khẩu", str -> Validate.isExist(str)));
@@ -138,6 +139,10 @@ public class FormSignUp extends JFrame {
 					labelMessage.set(5, validateForm.get(5).validate(soDienThoai));
 					labelMessage.set(6, validateForm.get(6).validate(diaChi));
 
+					if (!password.equals(repassword)) {
+						labelMessage.set(2, "Mật khẩu không trùng khớp");
+					}
+					
 					boolean haveError = false;
 					for (int i = 0; i < 7; i++) {
 						if (labelMessage.get(i) != null) {
