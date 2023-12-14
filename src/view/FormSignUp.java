@@ -20,6 +20,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
+import java.awt.Color;
 
 public class FormSignUp extends JFrame {
 
@@ -31,6 +32,9 @@ public class FormSignUp extends JFrame {
 	private JTextField inputEmail;
 	private JTextField inputPhone;
 	private JTextField inputAddress;
+	private JLabel labelErrorUsername;
+	private JLabel labelErrorEmail;
+	private JLabel labelErrorPhone;
 
 	/**
 	 * Launch the application.
@@ -63,7 +67,7 @@ public class FormSignUp extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
-				setContentPane(contentPane);
+		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel labelSignUp = new JLabel("ĐĂNG KÝ ĐỘC GIẢ");
@@ -150,7 +154,7 @@ public class FormSignUp extends JFrame {
 		JLabel labelPhone = new JLabel("Số điện thoại");
 		labelPhone.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/phone-call.png")));
 		labelPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelPhone.setBounds(310, 215, 100, 16);
+		labelPhone.setBounds(310, 215, 110, 16);
 		contentPane.add(labelPhone);
 		
 		inputPhone = new JTextField();
@@ -182,6 +186,27 @@ public class FormSignUp extends JFrame {
 		buttonSignUp.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		buttonSignUp.setBounds(220, 340, 150, 40);
 		contentPane.add(buttonSignUp);
+		
+		labelErrorUsername = new JLabel("New label");
+		labelErrorUsername.setVisible(false);
+		labelErrorUsername.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorUsername.setForeground(Color.RED);
+		labelErrorUsername.setBounds(120, 95, 150, 16);
+		contentPane.add(labelErrorUsername);
+		
+		labelErrorEmail = new JLabel("New label");
+		labelErrorEmail.setVisible(false);
+		labelErrorEmail.setForeground(Color.RED);
+		labelErrorEmail.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorEmail.setBounds(410, 155, 150, 16);
+		contentPane.add(labelErrorEmail);
+		
+		labelErrorPhone = new JLabel("New label");
+		labelErrorPhone.setVisible(false);
+		labelErrorPhone.setForeground(Color.RED);
+		labelErrorPhone.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorPhone.setBounds(420, 215, 140, 16);
+		contentPane.add(labelErrorPhone);
 	}
 }
 
