@@ -1,26 +1,42 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
+
+import bean.Account;
+import bean.DocGia;
+import bo.AccountBo;
+import bo.DocGiaBo;
+import utils.SHA256;
+import utils.Validate;
+import utils.ValidateElement;
+import utils.ValidateForm;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.awt.event.ActionEvent;
+import java.awt.Component;
 
 public class FormSignUp extends JFrame {
 
@@ -32,31 +48,118 @@ public class FormSignUp extends JFrame {
 	private JTextField inputEmail;
 	private JTextField inputPhone;
 	private JTextField inputAddress;
+	private JFrame parent;
+	private JButton buttonSignUp;
+	private JComboBox<String> comboGender;
+	private SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+	private JFormattedTextField inputBirthday;
+	private JPasswordField inputRepassword;
 	private JLabel labelErrorUsername;
+	private JLabel labelErrorPassword;
+	private JLabel labelErrorRepassword;
+	private JLabel labelErrorFullname;
 	private JLabel labelErrorEmail;
 	private JLabel labelErrorPhone;
+	private JLabel labelErrorAddress;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FormSignUp frame = new FormSignUp();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private ArrayList<JLabel> labelErrors = new ArrayList<JLabel>();
+	private ArrayList<String> labelMessage = new ArrayList<String>();
+	private ArrayList<ValidateForm<String>> validateForm = new ArrayList<ValidateForm<String>>();
+	
 	/**
 	 * Create the frame.
 	 */
-	public FormSignUp() {
+	public FormSignUp(JFrame parent) {
+		this.parent = parent;
 		createContents();
+		signUp();
+		createValidateForm();
+	}
+	
+	public void createValidateForm() {
+		labelErrors.add(labelErrorUsername);
+		labelErrors.add(labelErrorPassword);
+		labelErrors.add(labelErrorRepassword);
+		labelErrors.add(labelErrorFullname);
+		labelErrors.add(labelErrorEmail);
+		labelErrors.add(labelErrorPhone);
+		labelErrors.add(labelErrorAddress);
+		
+		for (int i = 0; i < 7; i++) {
+			labelMessage.add(null);
+			validateForm.add(new ValidateForm<String>());
+		}
+		
+		// Username
+		validateForm.get(0).addElement(new ValidateElement<String>("Vui lòng nhập username", str -> Validate.isExist(str)));
+		validateForm.get(0).addElement(new ValidateElement<String>("Username phải dài hơn 5 ký tự", str -> str.length() >= 5));
+		validateForm.get(0).addElement(new ValidateElement<String>("Username đã tồn tại", str -> AccountBo.getAccountByUsername(str) == null));
+		
+		// Password
+		validateForm.get(1).addElement(new ValidateElement<String>("Vui lòng nhập mật khẩu", str -> Validate.isExist(str)));
+		
+		// Repassword
+		validateForm.get(2).addElement(new ValidateElement<String>("Vui lòng nhập lại mật khẩu", str -> Validate.isExist(str)));
+		
+		// Fullname
+		validateForm.get(3).addElement(new ValidateElement<String>("Vui lòng nhập họ tên", str -> Validate.isExist(str)));
+		
+		// Email
+		validateForm.get(4).addElement(new ValidateElement<String>("Vui lòng nhập email", str -> Validate.isExist(str)));
+		validateForm.get(4).addElement(new ValidateElement<String>("Email không hợp lệ", str -> Validate.isEmail(str)));
+		
+		// Phone
+		validateForm.get(5).addElement(new ValidateElement<String>("Vui lòng nhập SĐT", str -> Validate.isExist(str)));
+		validateForm.get(5).addElement(new ValidateElement<String>("SĐT không hợp lệ", str -> Validate.isNumberPhone(str)));
+		
+		// Address
+		validateForm.get(6).addElement(new ValidateElement<String>("Vui lòng nhập địa chỉ", str -> Validate.isExist(str)));
+	}
+	
+	public void signUp() {
+		buttonSignUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String username = inputUsername.getText().strip();
+					String password = String.valueOf(inputPassword.getPassword()).strip();
+					String repassword = String.valueOf(inputRepassword.getPassword()).strip();
+					String hoTen = inputFullName.getText().strip();
+					boolean gioiTinh = String.valueOf(comboGender.getSelectedItem()).equals("Nam") ? true : false;
+					Date ngaySinh = spf.parse(inputBirthday.getText());
+					String email = inputEmail.getText().strip();
+					String soDienThoai = inputPhone.getText().strip();
+					String diaChi = inputAddress.getText().strip();
+					
+					labelMessage.set(0, validateForm.get(0).validate(username));
+					labelMessage.set(1, validateForm.get(1).validate(password));
+					labelMessage.set(2, validateForm.get(2).validate(repassword));
+					labelMessage.set(3, validateForm.get(3).validate(hoTen));
+					labelMessage.set(4, validateForm.get(4).validate(email));
+					labelMessage.set(5, validateForm.get(5).validate(soDienThoai));
+					labelMessage.set(6, validateForm.get(6).validate(diaChi));
+
+					boolean haveError = false;
+					for (int i = 0; i < 7; i++) {
+						if (labelMessage.get(i) != null) {
+							haveError = true;
+							labelErrors.get(i).setText(labelMessage.get(i));
+							labelErrors.get(i).setVisible(true);
+						}
+						else {
+							labelErrors.get(i).setVisible(false);
+						}
+					}
+					
+					if (!haveError) {
+						AccountBo.insertAccount(new Account(username, SHA256.getString(password), 0, new Date()));
+						DocGiaBo.insertDocGia(new DocGia(0, hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username));
+						JOptionPane.showMessageDialog(null, "Đăng ký độc giả thành công");
+					}
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	private void createContents() {
@@ -103,17 +206,17 @@ public class FormSignUp extends JFrame {
 		inputFullName = new JTextField();
 		inputFullName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputFullName.setColumns(10);
-		inputFullName.setBounds(20, 235, 250, 25);
+		inputFullName.setBounds(20, 295, 250, 25);
 		contentPane.add(inputFullName);
 		
 		JLabel labelFullName = new JLabel("Họ và tên");
 		labelFullName.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/id-card.png")));
 		labelFullName.setLabelFor(inputFullName);
 		labelFullName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelFullName.setBounds(20, 215, 100, 16);
+		labelFullName.setBounds(20, 275, 100, 16);
 		contentPane.add(labelFullName);
 		
-		JComboBox<String> comboGender = new JComboBox<String>();
+		comboGender = new JComboBox<String>();
 		comboGender.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		comboGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
 		comboGender.setBounds(485, 115, 75, 25);
@@ -125,7 +228,7 @@ public class FormSignUp extends JFrame {
 		labelBirthday.setBounds(310, 95, 100, 16);
 		contentPane.add(labelBirthday);
 		
-		JFormattedTextField inputBirthday = new JFormattedTextField(new TimeFormatter());
+		inputBirthday = new JFormattedTextField(new TimeFormatter());
 		labelBirthday.setLabelFor(inputBirthday);
 		inputBirthday.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputBirthday.setBounds(310, 115, 165, 25);
@@ -181,32 +284,68 @@ public class FormSignUp extends JFrame {
 		separator.setBounds(20, 75, 540, 2);
 		contentPane.add(separator);
 		
-		JButton buttonSignUp = new JButton("Đăng ký");
+		buttonSignUp = new JButton("Đăng ký");
 		buttonSignUp.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/sign-up.png")));
 		buttonSignUp.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		buttonSignUp.setBounds(220, 340, 150, 40);
 		contentPane.add(buttonSignUp);
 		
-		labelErrorUsername = new JLabel("New label");
+		labelErrorUsername = new JLabel("");
 		labelErrorUsername.setVisible(false);
-		labelErrorUsername.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorUsername.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		labelErrorUsername.setForeground(Color.RED);
 		labelErrorUsername.setBounds(120, 95, 150, 16);
 		contentPane.add(labelErrorUsername);
 		
-		labelErrorEmail = new JLabel("New label");
+		labelErrorEmail = new JLabel("");
 		labelErrorEmail.setVisible(false);
 		labelErrorEmail.setForeground(Color.RED);
-		labelErrorEmail.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorEmail.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		labelErrorEmail.setBounds(410, 155, 150, 16);
 		contentPane.add(labelErrorEmail);
 		
-		labelErrorPhone = new JLabel("New label");
+		labelErrorPhone = new JLabel("");
 		labelErrorPhone.setVisible(false);
 		labelErrorPhone.setForeground(Color.RED);
-		labelErrorPhone.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		labelErrorPhone.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		labelErrorPhone.setBounds(420, 215, 140, 16);
 		contentPane.add(labelErrorPhone);
+		
+		inputRepassword = new JPasswordField();
+		inputRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		inputRepassword.setBounds(20, 235, 250, 25);
+		contentPane.add(inputRepassword);
+		
+		JLabel labelRepassword = new JLabel("Re-Password");
+		labelRepassword.setLabelFor(labelRepassword);
+		labelRepassword.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/key.png")));
+		labelRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelRepassword.setBounds(20, 215, 100, 16);
+		contentPane.add(labelRepassword);
+		
+		labelErrorPassword = new JLabel("");
+		labelErrorPassword.setForeground(Color.RED);
+		labelErrorPassword.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		labelErrorPassword.setBounds(120, 155, 150, 16);
+		contentPane.add(labelErrorPassword);
+		
+		labelErrorRepassword = new JLabel("");
+		labelErrorRepassword.setForeground(Color.RED);
+		labelErrorRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		labelErrorRepassword.setBounds(120, 215, 150, 16);
+		contentPane.add(labelErrorRepassword);
+		
+		labelErrorFullname = new JLabel("");
+		labelErrorFullname.setForeground(Color.RED);
+		labelErrorFullname.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		labelErrorFullname.setBounds(120, 275, 150, 16);
+		contentPane.add(labelErrorFullname);
+		
+		labelErrorAddress = new JLabel("");
+		labelErrorAddress.setForeground(Color.RED);
+		labelErrorAddress.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		labelErrorAddress.setBounds(410, 275, 150, 16);
+		contentPane.add(labelErrorAddress);
 	}
 }
 
