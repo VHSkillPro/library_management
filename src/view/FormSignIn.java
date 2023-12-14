@@ -26,6 +26,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class FormSignIn extends JFrame {
 
@@ -54,6 +56,7 @@ public class FormSignIn extends JFrame {
 		createContents();
 		openFormSignUp();
 		signIn();
+		enterSignIn();
 	}
 	
 	public void openFormSignUp() {
@@ -62,6 +65,17 @@ public class FormSignIn extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				formSignUp.setVisible(true);
 				thisForm.setVisible(false);
+			}
+		});
+	}
+	
+	public void enterSignIn() {
+		inputPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					buttonSignIn.doClick();
+				}
 			}
 		});
 	}
