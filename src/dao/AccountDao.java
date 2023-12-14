@@ -21,7 +21,7 @@ public class AccountDao {
 			if (rs.next()) {
 				String password = rs.getString("password");
 				int role = rs.getInt("role");
-				Date createTime = new Date(rs.getDate("datetime").getTime());
+				Date createTime = new Date(rs.getDate("createTime").getTime());
 				account = new Account(username, password, role, createTime);
 			}
 		} catch (Exception e) {
@@ -55,7 +55,7 @@ public class AccountDao {
 	
 	static public Boolean insertAccount(Account account) {
 		try {
-			String sql = "insert into TaiKhoan (username, password, role, createTime) "
+			String sql = "insert into TaiKhoan (username, password, role, createTime)\n"
 					   + "values (?, ?, ?, ?)";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setString(1, account.getUsername());
@@ -63,12 +63,8 @@ public class AccountDao {
 			stmt.setInt(3, account.getRole());
 			stmt.setDate(4, new java.sql.Date(account.getCreateTime().getTime()));
 			
-			if (stmt.execute()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			stmt.executeUpdate();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,19 +74,15 @@ public class AccountDao {
 	
 	static public Boolean updatePassword(String username, String password) {
 		try {
-			String sql = "update TaiKhoan "
-					   + "set password = ? "
+			String sql = "update TaiKhoan\n"
+					   + "set password = ?\n"
 					   + "where username = ?";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setString(1, password);
 			stmt.setString(2, username);
 			
-			if (stmt.execute()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			stmt.executeUpdate();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,17 +92,13 @@ public class AccountDao {
 	
 	static public Boolean deleteAccount(String username) {
 		try {
-			String sql = "delete from TaiKhoan "
+			String sql = "delete from TaiKhoan\n"
 					   + "where username = ?";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setString(1, username);
 			
-			if (stmt.execute()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			stmt.executeUpdate();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
