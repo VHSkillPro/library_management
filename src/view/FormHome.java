@@ -12,8 +12,8 @@ public class FormHome extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private FormSignUp formSignUp;
-
+	private FormSignIn formSignIn;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -23,7 +23,7 @@ public class FormHome extends JFrame {
 				try {
 					Database.getInstance("35.240.220.181", "library_mangement", "sqlserver", "123123");
 					FormHome frame = new FormHome();
-					frame.setVisible(true);
+					frame.setVisible(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -35,8 +35,8 @@ public class FormHome extends JFrame {
 	 * Create the frame.
 	 */
 	public FormHome() {
-		this.formSignUp = new FormSignUp(this);
-		this.formSignUp.setVisible(true);
+		this.formSignIn = new FormSignIn(this);
+		this.formSignIn.setVisible(true);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

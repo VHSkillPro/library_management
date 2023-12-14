@@ -27,16 +27,15 @@ import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.awt.event.ActionEvent;
-import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FormSignUp extends JFrame {
 
@@ -48,7 +47,6 @@ public class FormSignUp extends JFrame {
 	private JTextField inputEmail;
 	private JTextField inputPhone;
 	private JTextField inputAddress;
-	private JFrame parent;
 	private JButton buttonSignUp;
 	private JComboBox<String> comboGender;
 	private SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
@@ -66,14 +64,27 @@ public class FormSignUp extends JFrame {
 	private ArrayList<String> labelMessage = new ArrayList<String>();
 	private ArrayList<ValidateForm<String>> validateForm = new ArrayList<ValidateForm<String>>();
 	
+	private JFrame parent;
+	private FormSignUp thisForm = this;
+	
 	/**
 	 * Create the frame.
 	 */
 	public FormSignUp(JFrame parent) {
 		this.parent = parent;
+		closeForm();
 		createContents();
 		signUp();
 		createValidateForm();
+	}
+	
+	public void closeForm() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				parent.setVisible(true);
+			}
+		});
 	}
 	
 	public void createValidateForm() {
@@ -159,6 +170,7 @@ public class FormSignUp extends JFrame {
 						AccountBo.insertAccount(new Account(username, SHA256.getString(password), 0, new Date()));
 						DocGiaBo.insertDocGia(new DocGia(0, hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username));
 						JOptionPane.showMessageDialog(null, "Đăng ký độc giả thành công");
+						thisForm.dispatchEvent(new WindowEvent(thisForm, WindowEvent.WINDOW_CLOSING));
 					}
 				} catch (ParseException e1) {
 					e1.printStackTrace();
@@ -170,7 +182,7 @@ public class FormSignUp extends JFrame {
 	private void createContents() {
 		setResizable(false);
 		setTitle("Đăng ký độc giả - Phần mềm quản lý thư viện");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
