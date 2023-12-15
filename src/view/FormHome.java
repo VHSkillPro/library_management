@@ -45,7 +45,7 @@ public class FormHome extends JFrame {
 				try {
 					Database.getInstance("35.240.220.181", "library_mangement", "sqlserver", "123123");
 					FormHome frame = new FormHome();
-					frame.setVisible(false);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
