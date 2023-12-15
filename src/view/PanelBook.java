@@ -17,8 +17,8 @@ public class PanelBook extends JPanel {
 	private void createContents() {
 		setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Đây là panel của sách");
-		lblNewLabel.setBounds(153, 138, 128, 13);
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(24, 27, 128, 13);
 		add(lblNewLabel);
 	}
 }
