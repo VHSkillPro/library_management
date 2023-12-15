@@ -40,7 +40,7 @@ public class FormSignIn extends JFrame {
 	private JLabel labelErrorUsername;
 	private JLabel labelErrorPassword;
 	
-	private JFrame parent;
+	private FormHome parent;
 	private FormSignUp formSignUp = new FormSignUp(this);
 	private FormSignIn thisForm = this;
 
@@ -50,7 +50,7 @@ public class FormSignIn extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FormSignIn(JFrame parent) {
+	public FormSignIn(FormHome parent) {
 		this.parent = parent;
 		buildValidateForm();
 		createContents();
@@ -122,6 +122,7 @@ public class FormSignIn extends JFrame {
 						JOptionPane.showMessageDialog(null, "Đăng nhập thành công", "Thông báo đăng nhập", JOptionPane.INFORMATION_MESSAGE);
 						parent.setVisible(true);
 						thisForm.setVisible(false);
+						parent.setAccount(account);
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Đăng nhập thất bại", "Thông báo đăng nhập", JOptionPane.ERROR_MESSAGE);
