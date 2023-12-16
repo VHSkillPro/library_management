@@ -1,5 +1,4 @@
 package view;
-
 import java.awt.EventQueue;
 import java.awt.Font;
 
@@ -9,6 +8,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import bean.ChiTietPhieuMuon;
+import bean.DocGia;
+import bean.PhieuMuon;
+import bean.ThuThu;
+import bo.BookBo;
+import bo.ChiTietPhieuMuonBo;
+import bo.DocGiaBo;
+import bo.PhieuMuonBo;
+import bo.ThuThuBo;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollBar;
@@ -16,16 +27,22 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class FormChiTietPhieuMuon extends JFrame {
 
 	private JPanel contentPane;
 	private JFrame parent;
-	private Integer maPhieuMuon;
+	private DocGia docGia;
+	private ThuThu thuThu;
+	private PhieuMuon phieuMuon;
 	private JTextField txtMaKhachHang;
 	private JTextField txtTenKhachHang;
 	private JTextField txtPhone;
+	private JTextField txtThoiHan;
+	private ArrayList<ChiTietPhieuMuon> lst;
 	private JTable table;
 	/**
 	 * Launch the application.
@@ -45,9 +62,9 @@ public class FormChiTietPhieuMuon extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel labelPhieuMuon = new JLabel("Phiếu mượn #" + maPhieuMuon.toString());
+		JLabel labelPhieuMuon = new JLabel("Phiếu mượn #" + phieuMuon.getMaPhieuMuon());
 		labelPhieuMuon.setFont(new Font("Segoe UI", Font.BOLD, 21));
-		labelPhieuMuon.setBounds(134, 11, 204, 50);
+		labelPhieuMuon.setBounds(66, 10, 204, 50);
 		contentPane.add(labelPhieuMuon);
 		
 		JSeparator separator = new JSeparator();
@@ -55,9 +72,12 @@ public class FormChiTietPhieuMuon extends JFrame {
 		contentPane.add(separator);
 		
 		txtMaKhachHang = new JTextField();
+		txtMaKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtMaKhachHang.setEditable(false);
 		txtMaKhachHang.setColumns(10);
-		txtMaKhachHang.setBounds(20, 123, 250, 25);
+		txtMaKhachHang.setText(Integer.valueOf(docGia.getMaDocGia()).toString());
+		txtMaKhachHang.setBounds(20, 123, 233, 25);
+		txtMaKhachHang.getCaret().setVisible(false);
 		contentPane.add(txtMaKhachHang);
 		
 		JLabel lblmaKhachHang = new JLabel("Mã khách hàng");
@@ -67,60 +87,111 @@ public class FormChiTietPhieuMuon extends JFrame {
 		contentPane.add(lblmaKhachHang);
 		
 		txtTenKhachHang = new JTextField();
+		txtTenKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtTenKhachHang.setEditable(false);
 //		txtTenKhachHang.setColumns(10);
-		txtTenKhachHang.setBounds(20, 201, 250, 25);
+		txtTenKhachHang.getCaret().setVisible(false);
+		txtTenKhachHang.setText(docGia.getHoTen());
+		txtTenKhachHang.setBounds(20, 190, 233, 25);
 		contentPane.add(txtTenKhachHang);
 		
 		JLabel lblTenKhachHang = new JLabel("Tên khách hàng");
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblTenKhachHang.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/id-card.png")));
-		lblTenKhachHang.setBounds(20, 181, 118, 16);
+		lblTenKhachHang.setBounds(20, 170, 118, 16);
 		contentPane.add(lblTenKhachHang);
 		
 		JLabel lblPhone = new JLabel("Số điện thoại");
 		lblPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblPhone.setBounds(20, 264, 118, 16);
+		lblPhone.setBounds(20, 237, 118, 16);
 		lblPhone.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/phone-call.png")));
 		contentPane.add(lblPhone);
 		
 		txtPhone = new JTextField();
+		txtPhone.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtPhone.setEditable(false);
-		txtPhone.setBounds(20, 284, 250, 25);
+		txtPhone.setBounds(20, 257, 233, 25);
+		txtPhone.setText(docGia.getSoDienThoai());
+		txtPhone.getCaret().setVisible(false);
 		contentPane.add(txtPhone);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(319, 72, 9, 422);
+		separator_1.setBounds(263, 71, 9, 422);
 		contentPane.add(separator_1);
 		
 		JLabel lbllistBook = new JLabel("Danh sách mượn");
 		lbllistBook.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lbllistBook.setBounds(338, 83, 204, 16);
+		lbllistBook.setBounds(284, 103, 204, 16);
 		lbllistBook.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/ballot.png")));
 		contentPane.add(lbllistBook);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(338, 423, 443, -296);
-		contentPane.add(scrollPane);
-		
-		table = new JTable();
-		table.setBounds(338, 110, 466, 320);
-		contentPane.add(table);
-		
-		JButton btnInHoaDon = new JButton("In Hóa Đơn");
+		JButton btnInHoaDon = new JButton("In phiếu mượn");
 		btnInHoaDon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		btnInHoaDon.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnInHoaDon.setBounds(51, 349, 167, 36);
+		btnInHoaDon.setBounds(45, 380, 176, 36);
 		btnInHoaDon.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/printer.png")));
 		contentPane.add(btnInHoaDon);
+		
+		JLabel lblNguoiTao = new JLabel("Người tạo : " + thuThu.getHoTen() + " #" + thuThu.getMaThuThu());
+		lblNguoiTao.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 18));
+		lblNguoiTao.setBounds(476, 11, 244, 50);
+		contentPane.add(lblNguoiTao);
+		
+		JLabel lblThoiGian = new JLabel("Thời hạn mượn");
+		lblThoiGian.setIcon(new ImageIcon("C:\\Users\\doan2\\eclipse-workspace\\library_management\\src\\icons\\deadline.png"));
+		lblThoiGian.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblThoiGian.setBounds(20, 305, 118, 16);
+		contentPane.add(lblThoiGian);
+		
+		txtThoiHan = new JTextField();
+		txtThoiHan.setText((String) null);
+		txtThoiHan.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		txtThoiHan.setEditable(false);
+		txtThoiHan.setBounds(20, 325, 233, 25);
+		String ngayTra = "?";
+		try {
+			ngayTra = phieuMuon.getNgayTra().toString();
+		} catch (Exception e) {
+			
+		}
+		txtThoiHan.setText(phieuMuon.getNgayMuon().toString() + " - " + ngayTra);
+		contentPane.add(txtThoiHan);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(282, 123, 522, 289);
+		contentPane.add(scrollPane);
+		
+		table = new JTable();
+		scrollPane.setRowHeaderView(table);
+		scrollPane.setViewportView(table);
 	}
-	public FormChiTietPhieuMuon(Integer ma) {
+	
+	public void loadTable(ArrayList<ChiTietPhieuMuon> lst) {
+		DefaultTableModel dtm = new DefaultTableModel();
+		dtm.addColumn("Mã sách");
+		dtm.addColumn("Tên sách");
+		dtm.addColumn("Số lượng");
+		Object[] o = new Object[3];
+		for (ChiTietPhieuMuon ch : lst) {
+			o[0] = ch.getMaSach();
+			o[1] = BookBo.findByBookId(ch.getMaSach()).getTenSach();
+			o[2] = ch.getSoLuong();
+			dtm.addRow(o);
+		}
+		table.setModel(dtm);
+	}
+	
+	public FormChiTietPhieuMuon(Integer ma, Integer maKH, Integer maTT) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.maPhieuMuon = ma;
+		this.docGia = DocGiaBo.getDocGiaByMaDocGia(maKH);
+		this.thuThu = ThuThuBo.getThuThuByMaThuThu(maTT);
+		this.phieuMuon = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(ma);
 		content();
+		lst = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon.getMaPhieuMuon());
+		loadTable(lst);
 	}
 }

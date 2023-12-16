@@ -62,7 +62,6 @@ public class PanelPhieuMuon extends JPanel {
 		}
 		tableListPhieuMuon.setModel(tb);
 		setJTableColumnsWidth(tableListPhieuMuon, 1015, 13, 23.5, 23.5, 13.3, 13.3, 13.3);
-		
 	}
 	private void createContents() {
 		setBounds(new Rectangle(0, 0, 1035, 680));
@@ -88,7 +87,9 @@ public class PanelPhieuMuon extends JPanel {
 				int row = tableListPhieuMuon.getSelectedRow();
 				TableModel md = tableListPhieuMuon.getModel();
 				Integer ma = Integer.parseInt(md.getValueAt(row, 0).toString());
-				frmChiTietPhieuMuon = new FormChiTietPhieuMuon(ma);
+				Integer maKH = Integer.parseInt(md.getValueAt(row, 4).toString());
+				Integer maTT = Integer.parseInt(md.getValueAt(row, 5).toString());
+				frmChiTietPhieuMuon = new FormChiTietPhieuMuon(ma, maKH, maTT);
 				frmChiTietPhieuMuon.setVisible(true);
 			}
 		});
