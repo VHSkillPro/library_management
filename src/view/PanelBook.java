@@ -18,7 +18,6 @@ public class PanelBook extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelBook() {
-
 		createContents();
 	}
 	private void createContents() {

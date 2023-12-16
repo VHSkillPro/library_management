@@ -19,6 +19,8 @@ import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FormHome extends JFrame {
 
@@ -33,8 +35,8 @@ public class FormHome extends JFrame {
 	private FormSignIn formSignIn;
 	private FormHome thisForm = this;
 	private JPanel panelContent;
-	
 	private PanelBook panelBook;
+	private PanelPhieuMuon panelPhieuMuon;
 	
 	/**
 	 * Launch the application.
@@ -131,6 +133,17 @@ public class FormHome extends JFrame {
 		panelMenu.add(buttonMenu1);
 		
 		JButton buttonMenu2 = new JButton("Phiếu mượn");
+		buttonMenu2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelPhieuMuon.setVisible(true);
+			}
+		});
+//		buttonMenu2.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				panelPhieuMuon.setVisible(true);
+//			}
+//		});
 		buttonMenu2.setBorderPainted(false);
 		buttonMenu2.setBackground(new Color(240, 240, 240));
 		buttonMenu2.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -162,6 +175,12 @@ public class FormHome extends JFrame {
 		panelBook.setBounds(230, 0, 1035, 680);
 		panelBook.setVisible(false);
 		contentPane.add(panelBook);
+		
+		//panelPhieuMuon
+		panelPhieuMuon = new PanelPhieuMuon();
+		panelPhieuMuon.setBounds(230, 0, 1035, 680);
+		panelPhieuMuon.setVisible(false);
+		contentPane.add(panelPhieuMuon);
 	}
 	
 	public void setAccount(Account account) {
