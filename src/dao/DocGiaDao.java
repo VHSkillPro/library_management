@@ -86,6 +86,48 @@ public class DocGiaDao {
 		return docGia;
 	}
 	
+	static public ArrayList<DocGia> findDocGia(String maDocGia, String hoTen, int gioiTinh, Date fromDate, Date toDate, String email, String soDienThoai) {
+		ArrayList<DocGia> listDocGia = new ArrayList<DocGia>();
+		
+		try {
+			String sql = "exec proc_FindDocGia\r\n"
+					+ "	@maDocGia = ?,\r\n"
+					+ "	@hoTen = ?,\r\n"
+					+ "	@gioiTinh = ?,\r\n"
+					+ "	@fromDate = ?,\r\n"
+					+ "	@toDate = ?,\r\n"
+					+ "	@email = ?,\r\n"
+					+ "	@soDienThoai = ?";
+			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+			stmt.setString(1, maDocGia);
+			stmt.setString(2, hoTen);
+			stmt.setInt(3, gioiTinh);
+			stmt.setDate(4, fromDate == null ? null : new java.sql.Date(fromDate.getTime()));
+			stmt.setDate(5, toDate == null ? null : new java.sql.Date(toDate.getTime()));
+			stmt.setString(6, email);
+			stmt.setString(7, soDienThoai);
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				int _maDocGia = rs.getInt("maDocGia");
+				String _hoTen = rs.getString("hoTen");
+				boolean _gioiTinh = rs.getBoolean("gioiTinh");
+				Date _ngaySinh = new Date(rs.getDate("ngaySinh").getTime());
+				String _email = rs.getString("email");
+				String _soDienThoai = rs.getString("soDienThoai");
+				String _diaChi = rs.getString("diaChi");
+				String _username = rs.getString("username");
+				listDocGia.add(new DocGia(_maDocGia, _hoTen, _gioiTinh, _ngaySinh, _email, _soDienThoai, _diaChi, _username));
+			}
+			
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return listDocGia;
+	}
+	
 	static public Boolean insertDocGia(DocGia docGia) {
 		try {
 			String sql = "insert into DocGia(hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username)\n"

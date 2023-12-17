@@ -27,34 +27,39 @@ public class PanelDocGia extends JPanel {
 	private JTable tableListDocGia;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private PanelDocGia thisPanel = this;
-	private FormEditDocGia formEdit;
 	private JButton buttonReload;
 	private JButton btnDelete;
+	private JButton buttonFind;
+	private JButton buttonAdd;
 
+	private FormEditDocGia formEdit;
+	private PanelDocGia thisPanel = this;
+	private FormFindDocGia formFind;
+	
 	/**
 	 * Create the panel.
 	 */
 	public PanelDocGia() {
 		createContents();
+		findDocGia();
 		clickRow();
 		reloadTable();
 		deleteRow();
 		loadTable(DocGiaBo.getAllDocGia());
 	}
 	
+	public void findDocGia() {
+		buttonFind.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formFind.setVisible(true);
+			}
+		});
+	}
+	
 	private void clickRow() {
 		tableListDocGia.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int selectedRow = tableListDocGia.getSelectedRow();
-				if (selectedRow != -1) {
-					btnDelete.setEnabled(true);
-				}
-				else {
-					btnDelete.setEnabled(false);
-				}
-				
 				if (e.getClickCount() == 2) {
 					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
 					formEdit = new FormEditDocGia(maDocGia, thisPanel);
@@ -67,14 +72,21 @@ public class PanelDocGia extends JPanel {
 	public void deleteRow() {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
-				if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
-					if (DocGiaBo.deleteDocGia(maDocGia)) {
-						JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-						loadTable(DocGiaBo.getAllDocGia());
-					}
-					else {
-						JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				int selectedRow = tableListDocGia.getSelectedRow();
+				
+				if (selectedRow == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn dữ liệu cần xoá", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
+					if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
+						if (DocGiaBo.deleteDocGia(maDocGia)) {
+							JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+							loadTable(DocGiaBo.getAllDocGia());
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 			}
@@ -126,23 +138,22 @@ public class PanelDocGia extends JPanel {
 		tableListDocGia.setRowHeight(30);
 		scrollPane.setViewportView(tableListDocGia);
 		
-		JLabel labelTitle = new JLabel("Quản lý độc giả");
+		JLabel labelTitle = new JLabel("QUẢN LÝ ĐỘC GIẢ");
 		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 25));
-		labelTitle.setBounds(10, 11, 400, 40);
+		labelTitle.setBounds(50, 15, 250, 40);
 		add(labelTitle);
 		
-		JButton buttonAdd = new JButton("Thêm");
+		buttonAdd = new JButton("Thêm");
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		buttonAdd.setBounds(705, 20, 100, 30);
 		add(buttonAdd);
 		
-		JButton buttonFind = new JButton("Tìm kiếm");
+		buttonFind = new JButton("Tìm kiếm");
 		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		buttonFind.setBounds(815, 20, 100, 30);
 		add(buttonFind);
 		
 		btnDelete = new JButton("Xoá");
-		btnDelete.setEnabled(false);
 		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
@@ -151,6 +162,8 @@ public class PanelDocGia extends JPanel {
 		buttonReload.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		buttonReload.setBounds(595, 20, 100, 30);
 		add(buttonReload);
+		
+		formFind = new FormFindDocGia(thisPanel);
 	}
 
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
