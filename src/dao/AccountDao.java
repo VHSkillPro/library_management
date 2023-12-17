@@ -31,6 +31,40 @@ public class AccountDao {
 		return account;
 	}
 	
+	static public ArrayList<Account> findAccount(String username, int role, Date fromDate, Date toDate) {
+		ArrayList<Account> accounts = new ArrayList<Account>();
+		
+		try {
+			java.sql.Date _fromDate = null, _toDate = null;
+			if (fromDate != null) _fromDate = new java.sql.Date(fromDate.getTime());
+			if (toDate != null) _toDate = new java.sql.Date(toDate.getTime());
+			
+			String sql = "exec proc_FindAccount\r\n"
+					+ "	@username = ?,\r\n"
+					+ "	@role = ?,\r\n"
+					+ "	@fromDate = ?,\r\n"
+					+ "	@toDate = ?";
+			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+			stmt.setString(1, username);
+			stmt.setInt(2, role);
+			stmt.setDate(3, _fromDate);
+			stmt.setDate(4, _toDate);
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				String _username = rs.getString("username");
+				String password = rs.getString("password");
+				int _role = rs.getInt("role");
+				Date createTime = new Date(rs.getDate("createTime").getTime());
+				accounts.add(new Account(_username, password, _role, createTime));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return accounts;
+	}
+	
 	static public ArrayList<Account> getAllAccount() {
 		ArrayList<Account> accounts = new ArrayList<Account>();
 		
