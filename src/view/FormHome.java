@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import bean.Account;
 import dao.Database;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -32,9 +33,9 @@ public class FormHome extends JFrame {
 	private Account account;
 	private FormSignIn formSignIn;
 	private FormHome thisForm = this;
-	private JPanel panelContent;
 	
 	private PanelBook panelBook;
+	private PanelAccount panelAccount;
 	
 	/**
 	 * Launch the application.
@@ -121,6 +122,7 @@ public class FormHome extends JFrame {
 		JButton buttonMenu1 = new JButton("Sách");
 		buttonMenu1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				panelAccount.setVisible(false);
 				panelBook.setVisible(true);
 			}
 		});
@@ -145,6 +147,12 @@ public class FormHome extends JFrame {
 		panelMenu.add(buttonMenu3);
 		
 		buttonMenu4 = new JButton("Tài khoản");
+		buttonMenu4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBook.setVisible(false);
+				panelAccount.setVisible(true);
+			}
+		});
 		buttonMenu4.setBorderPainted(false);
 		buttonMenu4.setBackground(new Color(240, 240, 240));
 		buttonMenu4.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -162,6 +170,11 @@ public class FormHome extends JFrame {
 		panelBook.setBounds(230, 0, 1035, 680);
 		panelBook.setVisible(false);
 		contentPane.add(panelBook);
+		
+		panelAccount = new PanelAccount();
+		panelAccount.setBounds(230, 0, 1035, 680);
+		panelAccount.setVisible(false);
+		contentPane.add(panelAccount);
 	}
 	
 	public void setAccount(Account account) {

@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Font;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class PanelBook extends JPanel {
