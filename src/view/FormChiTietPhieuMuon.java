@@ -165,7 +165,11 @@ public class FormChiTietPhieuMuon extends JFrame {
 		scrollPane.setBounds(282, 123, 522, 289);
 		contentPane.add(scrollPane);
 		
-		table = new JTable();
+		table = new JTable() {
+			public boolean isCellEditable(int row, int column) {                
+                return false;               
+			};
+		};
 		scrollPane.setRowHeaderView(table);
 		scrollPane.setViewportView(table);
 	}
@@ -175,11 +179,13 @@ public class FormChiTietPhieuMuon extends JFrame {
 		dtm.addColumn("Mã sách");
 		dtm.addColumn("Tên sách");
 		dtm.addColumn("Số lượng");
-		Object[] o = new Object[3];
+		dtm.addColumn("Giá/Cuốn");
+		Object[] o = new Object[4];
 		for (ChiTietPhieuMuon ch : lst) {
 			o[0] = ch.getMaSach();
 			o[1] = BookBo.findByBookId(ch.getMaSach()).getTenSach();
 			o[2] = ch.getSoLuong();
+			o[3] = BookBo.findByBookId(ch.getMaSach()).getDonGia();
 			dtm.addRow(o);
 		}
 		table.setModel(dtm);

@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -32,6 +34,8 @@ public class PanelPhieuMuon extends JPanel {
 	private ArrayList<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
 	private PhieuMuonBo phieuMuonBo = new PhieuMuonBo();
 	private FormChiTietPhieuMuon frmChiTietPhieuMuon;
+	private FormTaoPhieuMuon frmTaoPM;
+	private PanelPhieuMuon thisPanel = this;
 	/**
 	 * Create the panel.
 	 */
@@ -52,6 +56,28 @@ public class PanelPhieuMuon extends JPanel {
 		tb.addColumn("Mã thủ thư");
 		Object[] oj = new Object[6];
 		for (PhieuMuon pm : PhieuMuons) {
+			oj[0] = pm.getMaPhieuMuon();
+			oj[1] = pm.getNgayMuon();
+			oj[2] = pm.getNgayTra();
+			oj[3] = pm.getTrangThai();
+			oj[4] = pm.getMaDocGia();
+			oj[5] = pm.getMaThuThu();
+			tb.addRow(oj);
+		}
+		tableListPhieuMuon.setModel(tb);
+		setJTableColumnsWidth(tableListPhieuMuon, 1015, 13, 23.5, 23.5, 13.3, 13.3, 13.3);
+	}
+	void loadTableListPhieuMuon() {
+		DefaultTableModel tb = new DefaultTableModel();
+		tb.addColumn("Mã phiếu mượn");
+		tb.addColumn("Ngày mượn");
+		tb.addColumn("Ngày trả");
+		tb.addColumn("Trạng thái");
+		tb.addColumn("Mã đọc giả");
+		tb.addColumn("Mã thủ thư");
+		Object[] oj = new Object[6];
+		listPhieuMuon = PhieuMuonBo.getAllPhieuMuon();
+		for (PhieuMuon pm : listPhieuMuon) {
 			oj[0] = pm.getMaPhieuMuon();
 			oj[1] = pm.getNgayMuon();
 			oj[2] = pm.getNgayTra();
@@ -84,13 +110,16 @@ public class PanelPhieuMuon extends JPanel {
 		tableListPhieuMuon.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row = tableListPhieuMuon.getSelectedRow();
-				TableModel md = tableListPhieuMuon.getModel();
-				Integer ma = Integer.parseInt(md.getValueAt(row, 0).toString());
-				Integer maKH = Integer.parseInt(md.getValueAt(row, 4).toString());
-				Integer maTT = Integer.parseInt(md.getValueAt(row, 5).toString());
-				frmChiTietPhieuMuon = new FormChiTietPhieuMuon(ma, maKH, maTT);
-				frmChiTietPhieuMuon.setVisible(true);
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+					e.consume();
+					int row = tableListPhieuMuon.getSelectedRow();
+					TableModel md = tableListPhieuMuon.getModel();
+					Integer ma = Integer.parseInt(md.getValueAt(row, 0).toString());
+					Integer maKH = Integer.parseInt(md.getValueAt(row, 4).toString());
+					Integer maTT = Integer.parseInt(md.getValueAt(row, 5).toString());
+					frmChiTietPhieuMuon = new FormChiTietPhieuMuon(ma, maKH, maTT);
+					frmChiTietPhieuMuon.setVisible(true);
+				}
 			}
 		});
 		tableListPhieuMuon.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -105,9 +134,11 @@ public class PanelPhieuMuon extends JPanel {
 		JButton buttonAdd = new JButton("Tạo phiếu mượn");
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				frmTaoPM = new FormTaoPhieuMuon(thisPanel);
+				frmTaoPM.setVisible(true);
 			}
 		});
+		
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		buttonAdd.setBounds(551, 21, 141, 30);
 		add(buttonAdd);
@@ -118,11 +149,38 @@ public class PanelPhieuMuon extends JPanel {
 		add(buttonFind);
 		
 		JButton btnDelete = new JButton("Xoá");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = tableListPhieuMuon.getSelectedRow();
+				if (row == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu muốn xóa !");
+				} else {
+					if(JOptionPane.showConfirmDialog(btnDelete, "Xác nhận xóa !") == 0) {
+						TableModel md = tableListPhieuMuon.getModel();
+						PhieuMuon pm = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(Integer.valueOf(md.getValueAt(row, 0).toString()));
+						PhieuMuonBo.deletePhieuMuon(pm);
+						loadTableListPhieuMuon();
+					}
+				}
+			}
+		});
 		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
 		
 		JButton btnEdit = new JButton("Chỉnh sửa");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = tableListPhieuMuon.getSelectedRow();
+				TableModel md = tableListPhieuMuon.getModel();
+				if (row == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu mượn muốn chỉnh sửa !");
+				} else {
+					PhieuMuon pm = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(Integer.parseInt(md.getValueAt(row, 0).toString()));
+					new FormChinhSuaPhieuMuon(pm, thisPanel).setVisible(true);
+				}
+			}
+		});
 		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnEdit.setBounds(815, 21, 100, 30);
 		add(btnEdit);

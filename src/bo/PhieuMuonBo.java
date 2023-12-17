@@ -17,5 +17,13 @@ public class PhieuMuonBo {
 		return PhieuMuonDao.getPhieuMuonByMaPhieuMuon(ma);
 	}
 	
-	
+	static public boolean insertPhieuMuon(PhieuMuon pm) {
+		return PhieuMuonDao.insertPhieuMuon(pm);
+	}
+	static public PhieuMuon getLastestInsert() {
+		return PhieuMuonDao.getLastestInsert();
+	}
+	static public Boolean deletePhieuMuon(PhieuMuon phieuMuon) {
+		return PhieuMuonDao.deletePhieuMuon(phieuMuon);
+	}
 }

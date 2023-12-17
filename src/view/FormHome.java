@@ -121,8 +121,10 @@ public class FormHome extends JFrame {
 		panelMenu.setLayout(null);
 		
 		JButton buttonMenu1 = new JButton("Sách");
-		buttonMenu1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonMenu1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelPhieuMuon.setVisible(false);
 				panelBook.setVisible(true);
 			}
 		});
@@ -136,6 +138,7 @@ public class FormHome extends JFrame {
 		buttonMenu2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				panelBook.setVisible(false);
 				panelPhieuMuon.setVisible(true);
 			}
 		});

@@ -11,7 +11,7 @@ public class PhieuMuonDao {
 		ArrayList<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
 		
 		try {
-			String sql = "select * from dbo.PhieuMuon";
+			String sql = "select * from PhieuMuon";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -32,7 +32,7 @@ public class PhieuMuonDao {
 	static public ArrayList<PhieuMuon> getPhieuMuonByMaDocGia(int ma) {
 		ArrayList<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
 		try {
-			String sql = "select * from dbo.PhieuMuon where maDocGia=?";
+			String sql = "select * from PhieuMuon where maDocGia=?";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -72,7 +72,7 @@ public class PhieuMuonDao {
 	
 	static public Boolean insertPhieuMuon(PhieuMuon phieuMuon) {
 		try {
-			String sql = "insert into dbo.PhieuMuon(maDocGia, maThuThu, trangThai) values(?, ?, ?)";
+			String sql = "insert into PhieuMuon(maDocGia, maThuThu, trangThai) values(?, ?, ?)";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setInt(1, phieuMuon.getMaDocGia());
 			stmt.setInt(2, phieuMuon.getMaThuThu());
@@ -85,5 +85,35 @@ public class PhieuMuonDao {
 		return false;
 	}
 	
-	
+	static public Boolean deletePhieuMuon(PhieuMuon phieuMuon) {
+		try {
+			String sql = "DELETE FROM vw_PhieuMuon WHERE maPhieuMuon = ?";
+			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+			stmt.setInt(1, phieuMuon.getMaPhieuMuon());
+			int cl = stmt.executeUpdate();
+			return cl > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	static public PhieuMuon getLastestInsert() {
+		PhieuMuon pm = null;
+		try {
+			String sql = "SELECT TOP 1 * FROM vw_PhieuMuon ORDER BY maPhieuMuon DESC";
+			PreparedStatement ps = Database.getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				int maPhieuMuon = rs.getInt("maPhieuMuon");
+				Date ngayMuon = rs.getDate("ngayMuon"), ngayTra = rs.getDate("ngayTra");
+				int trangThai = rs.getInt("trangThai");
+				int maDocGia = rs.getInt("maDocGia");
+				int maThuThu = rs.getInt("maThuThu");
+				pm = new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, trangThai, maDocGia, maThuThu);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pm;
+	}
 }
