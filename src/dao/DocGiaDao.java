@@ -108,6 +108,34 @@ public class DocGiaDao {
 		return false;
 	}
 	
+	static public Boolean updateDocGia(int maDocGia, String hoTen, boolean gioiTinh, Date ngaySinh, String email, String soDienThoai, String diaChi) {
+		try {
+			String sql = "update DocGia\r\n"
+					+ "set hoTen = ?,\r\n"
+					+ "	gioiTinh = ?,\r\n"
+					+ "	ngaySinh = ?,\r\n"
+					+ "	email = ?,\r\n"
+					+ "	soDienThoai = ?,\r\n"
+					+ "	diaChi = ?\r\n"
+					+ "where maDocGia = ?";
+			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+			stmt.setString(1, hoTen);
+			stmt.setBoolean(2, gioiTinh);
+			stmt.setDate(3, new java.sql.Date(ngaySinh.getTime()));
+			stmt.setString(4, email);
+			stmt.setString(5, soDienThoai);
+			stmt.setString(6, diaChi);
+			stmt.setInt(7, maDocGia);
+			
+			stmt.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	static public Boolean deleteDocGia(int maDocGia) {
 		try {
 			String sql = "delete from DocGia\n"

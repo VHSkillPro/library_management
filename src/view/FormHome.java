@@ -36,6 +36,7 @@ public class FormHome extends JFrame {
 	
 	private PanelBook panelBook;
 	private PanelAccount panelAccount;
+	private PanelDocGia panelDocGia;
 	
 	/**
 	 * Launch the application.
@@ -123,6 +124,7 @@ public class FormHome extends JFrame {
 		buttonMenu1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelAccount.setVisible(false);
+				panelDocGia.setVisible(false);
 				panelBook.setVisible(true);
 			}
 		});
@@ -140,6 +142,13 @@ public class FormHome extends JFrame {
 		panelMenu.add(buttonMenu2);
 		
 		JButton buttonMenu3 = new JButton("Độc giả");
+		buttonMenu3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBook.setVisible(false);
+				panelAccount.setVisible(false);
+				panelDocGia.setVisible(true);
+			}
+		});
 		buttonMenu3.setBorderPainted(false);
 		buttonMenu3.setBackground(new Color(240, 240, 240));
 		buttonMenu3.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -150,6 +159,7 @@ public class FormHome extends JFrame {
 		buttonMenu4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelBook.setVisible(false);
+				panelDocGia.setVisible(false);
 				panelAccount.setVisible(true);
 			}
 		});
@@ -175,6 +185,11 @@ public class FormHome extends JFrame {
 		panelAccount.setBounds(230, 0, 1035, 680);
 		panelAccount.setVisible(false);
 		contentPane.add(panelAccount);
+		
+		panelDocGia = new PanelDocGia();
+		panelDocGia.setBounds(230, 0, 1035, 680);
+		panelDocGia.setVisible(false);
+		contentPane.add(panelDocGia);
 	}
 	
 	public void setAccount(Account account) {
