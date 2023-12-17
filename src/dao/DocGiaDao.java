@@ -144,6 +144,7 @@ public class DocGiaDao {
 			stmt.setInt(1, maDocGia);
 			
 			stmt.executeUpdate();
+			stmt.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

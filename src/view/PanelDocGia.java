@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,6 +18,8 @@ import bean.DocGia;
 import bo.DocGiaBo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelDocGia extends JPanel {
 
@@ -26,14 +29,17 @@ public class PanelDocGia extends JPanel {
 
 	private PanelDocGia thisPanel = this;
 	private FormEditDocGia formEdit;
+	private JButton buttonReload;
+	private JButton btnDelete;
 
-	
 	/**
 	 * Create the panel.
 	 */
 	public PanelDocGia() {
 		createContents();
 		clickRow();
+		reloadTable();
+		deleteRow();
 		loadTable(DocGiaBo.getAllDocGia());
 	}
 	
@@ -41,11 +47,44 @@ public class PanelDocGia extends JPanel {
 		tableListDocGia.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				int selectedRow = tableListDocGia.getSelectedRow();
+				if (selectedRow != -1) {
+					btnDelete.setEnabled(true);
+				}
+				else {
+					btnDelete.setEnabled(false);
+				}
+				
 				if (e.getClickCount() == 2) {
 					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
 					formEdit = new FormEditDocGia(maDocGia, thisPanel);
 					formEdit.setVisible(true);
 				}
+			}
+		});
+	}
+	
+	public void deleteRow() {
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
+				if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
+					if (DocGiaBo.deleteDocGia(maDocGia)) {
+						JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+						loadTable(DocGiaBo.getAllDocGia());
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+	}
+	
+	public void reloadTable() {
+		buttonReload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadTable(DocGiaBo.getAllDocGia());
 			}
 		});
 	}
@@ -82,7 +121,7 @@ public class PanelDocGia extends JPanel {
 			private static final long serialVersionUID = 1L;
 			public boolean editCellAt(int row, int column, java.util.EventObject e) {
 	            return false;
-	         }
+	        }
 		};
 		tableListDocGia.setRowHeight(30);
 		scrollPane.setViewportView(tableListDocGia);
@@ -102,10 +141,16 @@ public class PanelDocGia extends JPanel {
 		buttonFind.setBounds(815, 20, 100, 30);
 		add(buttonFind);
 		
-		JButton btnDelete = new JButton("Xoá");
+		btnDelete = new JButton("Xoá");
+		btnDelete.setEnabled(false);
 		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
+		
+		buttonReload = new JButton("Làm mới");
+		buttonReload.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		buttonReload.setBounds(595, 20, 100, 30);
+		add(buttonReload);
 	}
 
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
