@@ -14,12 +14,19 @@ import javax.swing.table.TableColumn;
 
 import bean.Account;
 import bo.AccountBo;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.awt.event.ActionEvent;
 
 public class PanelAccount extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable tableListAccount;
 
+	private FormFindAccount formFind;
+	private PanelAccount thisPanel = this;
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	
 	/**
 	 * Create the panel.
 	 */
@@ -41,7 +48,7 @@ public class PanelAccount extends JPanel {
 			row[0] = ++cntRow;
 			row[1] = account.getUsername();
 			row[2] = account.getRole() == 0 ? "Độc giả" : (account.getRole() == 1 ? "Thủ thư" : "Quản trị viên");
-			row[3] = account.getCreateTime().toString();
+			row[3] = sdf.format(account.getCreateTime());
 			dtm.addRow(row);
 		}
 		
@@ -57,11 +64,15 @@ public class PanelAccount extends JPanel {
 		scrollPane.setBounds(10, 62, 1015, 608);
 		add(scrollPane);
 		
-		tableListAccount = new JTable();
+		tableListAccount = new JTable() {
+			private static final long serialVersionUID = 1L;
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+	            return false;
+	         }
+		};
 		tableListAccount.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		tableListAccount.setRowHeight(30);
 		scrollPane.setViewportView(tableListAccount);
-		
 		
 		JLabel labelTitle = new JLabel("Quản lý tài khoản");
 		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -74,6 +85,11 @@ public class PanelAccount extends JPanel {
 		add(buttonAdd);
 		
 		JButton buttonFind = new JButton("Tìm kiếm");
+		buttonFind.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formFind.setVisible(true);
+			}
+		});
 		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		buttonFind.setBounds(705, 20, 100, 30);
 		add(buttonFind);
@@ -87,6 +103,8 @@ public class PanelAccount extends JPanel {
 		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnEdit.setBounds(815, 20, 100, 30);
 		add(btnEdit);
+		
+		formFind = new FormFindAccount(thisPanel);
 	}
 
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
