@@ -147,6 +147,8 @@ public class FormHome extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				panelBook.setVisible(false);
+				panelAccount.setVisible(false);
+				panelDocGia.setVisible(false);
 				panelPhieuMuon.setVisible(true);
 			}
 		});
@@ -166,6 +168,7 @@ public class FormHome extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				panelBook.setVisible(false);
 				panelAccount.setVisible(false);
+				panelPhieuMuon.setVisible(false);
 				panelDocGia.setVisible(true);
 			}
 		});
@@ -180,6 +183,7 @@ public class FormHome extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				panelBook.setVisible(false);
 				panelDocGia.setVisible(false);
+				panelPhieuMuon.setVisible(false);
 				panelAccount.setVisible(true);
 			}
 		});

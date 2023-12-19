@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 
+import bean.Book;
 import bean.PhieuMuon;
 
 public class PhieuMuonDao {
@@ -28,7 +29,27 @@ public class PhieuMuonDao {
 		
 		return listPhieuMuon;
 	}
-	
+	static public int updatePhieuMuon(PhieuMuon pm) {
+		int rr = 0;
+		try {
+			String sql = "UPDATE PhieuMuon\r\n"
+					+ "SET	ngayMuon = ?, ngayTra = ?, trangThai = ?\r\n"
+					+ "WHERE maPhieuMuon = ?";
+			PreparedStatement ps = Database.getConnection().prepareStatement(sql);
+			ps.setDate(1, new java.sql.Date(pm.getNgayMuon().getTime()));
+			if (pm.getNgayTra() != null)
+				ps.setDate(2, new java.sql.Date(pm.getNgayTra().getTime()));
+			else 
+				ps.setDate(2, null);
+			ps.setBoolean(3, pm.getTrangThai());
+			ps.setInt(4, pm.getMaPhieuMuon());
+			
+			 rr = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rr;
+	}
 	static public ArrayList<PhieuMuon> getPhieuMuonByMaDocGia(int ma) {
 		ArrayList<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
 		try {
@@ -97,6 +118,8 @@ public class PhieuMuonDao {
 		}
 		return false;
 	}
+	
+	
 	static public PhieuMuon getLastestInsert() {
 		PhieuMuon pm = null;
 		try {
@@ -113,6 +136,36 @@ public class PhieuMuonDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		return pm;
+	}
+	
+	static public ArrayList<PhieuMuon> findPhieuMuon(String maPm, int trangThai, Date from, Date to, String maTT, String maKH) {
+		ArrayList<PhieuMuon> pm = new ArrayList<PhieuMuon>();
+		try {
+			String sql = "EXEC proc_findPhieuMuon @maPhieuMuon=?,@trangThai=?,@from=?,@to=?,@maThuThu=?, @maDocGia=?";
+			
+			PreparedStatement ps = Database.getConnection().prepareStatement(sql);
+			ps.setString(1, maPm);
+			ps.setInt(2, trangThai);
+			ps.setDate(3, from == null ? null : new java.sql.Date(from.getTime()));
+			ps.setDate(4, to == null ? null : new java.sql.Date(to.getTime()));
+			ps.setString(5, maTT);
+			ps.setString(6, maKH);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				int maPhieuMuon = rs.getInt(1);
+				Date ngayMuon = rs.getDate(2), ngayTra = rs.getDate(3);
+				boolean _trangThai = rs.getBoolean(4);
+				int maDocGia = rs.getInt(5);
+				int maThuThu = rs.getInt(6);
+				pm.add(new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, _trangThai, maDocGia, maThuThu));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
 		}
 		return pm;
 	}

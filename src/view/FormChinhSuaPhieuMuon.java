@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import bean.PhieuMuon;
 import bo.BookBo;
 import bo.ChiTietPhieuMuonBo;
 import bo.DocGiaBo;
+import bo.PhieuMuonBo;
 import bo.ThuThuBo;
 import dao.Database;
 
@@ -36,6 +38,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.Color;
 
 public class FormChinhSuaPhieuMuon extends JFrame {
 
@@ -51,7 +63,10 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 	private PanelPhieuMuon parent;
 	private ArrayList<ChiTietPhieuMuon> lstChiTietPhieuMuon;
 	private boolean isCommit;
+	JLabel lbDateOutofBound;
+	private JDateChooser dateTo, dateFrom;
 	private FormChinhSuaPhieuMuon thisFrm = this;
+	private JComboBox cbStatus;
 	/**
 	 * Create the frame.
 	 */
@@ -60,7 +75,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		setContentPane(contentPane);
-		setBounds(new Rectangle(0, 0, 1035, 680));
+		setBounds(new Rectangle(0, 0, 1035, 745));
 		getContentPane().setLayout(null);
 		
 		JLabel lbTaoHD = new JLabel("Chỉnh sửa phiếu mượn #" + phieuMuon.getMaPhieuMuon());
@@ -75,11 +90,11 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(619, 71, 12, 482);
+		separator_1.setBounds(619, 71, 12, 586);
 		contentPane.add(separator_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(641, 110, 349, 443);
+		scrollPane.setBounds(641, 138, 349, 519);
 		contentPane.add(scrollPane);
 		
 		tableDSMuon = new JTable() {
@@ -98,13 +113,13 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		JButton btnConfirm = new JButton("Xác Nhận");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				conFirm();
+				confirm();
 				thisFrm.dispose();
 			}
 		});
 		btnConfirm.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		btnConfirm.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/confirmation.png")));
-		btnConfirm.setBounds(20, 564, 110, 30);
+		btnConfirm.setBounds(20, 668, 110, 30);
 		contentPane.add(btnConfirm);
 		
 		txtMaTT = new JTextField();
@@ -162,7 +177,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		contentPane.add(lblTnThTh);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(20, 241, 576, 312);
+		scrollPane_1.setBounds(20, 345, 576, 312);
 		contentPane.add(scrollPane_1);
 		
 		tableListBook = new JTable() {
@@ -181,7 +196,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		});
 		btnRefresh.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/refresh.png")));
 		btnRefresh.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnRefresh.setBounds(486, 208, 110, 30);
+		btnRefresh.setBounds(486, 300, 110, 30);
 		contentPane.add(btnRefresh);
 		
 		JButton btnSearch = new JButton("Tìm kiếm sách");
@@ -200,13 +215,13 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		});
 		btnSearch.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/search-interface-symbol.png")));
 		btnSearch.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnSearch.setBounds(343, 208, 135, 30);
+		btnSearch.setBounds(343, 300, 135, 30);
 		contentPane.add(btnSearch);
 		
 		JLabel lblSchTrongKho = new JLabel("Sách trong kho");
 		lblSchTrongKho.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/book.png")));
 		lblSchTrongKho.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblSchTrongKho.setBounds(20, 217, 118, 16);
+		lblSchTrongKho.setBounds(20, 321, 118, 16);
 		contentPane.add(lblSchTrongKho);
 		
 		JButton btnDelBook = new JButton("Xóa sách");
@@ -220,7 +235,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 					TableModel md = tableDSMuon.getModel();
 					int maSach = Integer.valueOf(md.getValueAt(row, 0).toString());
 					int posSach = BookBo.findPosInArraybyId(maSach, lstBook);
-					int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon.getMaPhieuMuon(), maSach, lstChiTietPhieuMuon);
+					int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon, BookBo.findByBookId(maSach), lstChiTietPhieuMuon);
 					
 					lstBook.get(posSach).setSoLuong(lstBook.get(posSach).getSoLuong() + lstChiTietPhieuMuon.get(posCTPM).getSoLuong());
 					lstChiTietPhieuMuon.remove(posCTPM);
@@ -232,7 +247,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		});
 		btnDelBook.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/delete.png")));
 		btnDelBook.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnDelBook.setBounds(880, 564, 110, 30);
+		btnDelBook.setBounds(880, 668, 110, 30);
 		contentPane.add(btnDelBook);
 		
 		JButton btnAdjust = new JButton("Chỉnh số lượng");
@@ -257,7 +272,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 						int cur = Integer.valueOf(md.getValueAt(row, 3).toString());
 						int pos = BookBo.findPosInArraybyId(maSach, lstBook);
 						
-						int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon.getMaPhieuMuon(), maSach, lstChiTietPhieuMuon);
+						int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon, BookBo.findByBookId(maSach), lstChiTietPhieuMuon);
 						
 						Book hv = lstBook.get(pos);
 						if (hv.getSoLuong() + cur >= num) {
@@ -275,7 +290,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		
 		btnAdjust.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/maths.png")));
 		btnAdjust.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnAdjust.setBounds(641, 564, 149, 30);
+		btnAdjust.setBounds(641, 668, 149, 30);
 		contentPane.add(btnAdjust);
 		
 		JButton btnAddBook = new JButton("Thêm sách");
@@ -286,7 +301,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 					JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 cuốn sách !");
 				} else {
 					TableModel md = tableListBook.getModel();
-					if (ChiTietPhieuMuonBo.checkDupicate(Integer.valueOf(md.getValueAt(row, 0).toString()), lstChiTietPhieuMuon)) {
+					if (ChiTietPhieuMuonBo.checkDupicate(BookBo.findByBookId(Integer.valueOf(md.getValueAt(row, 0).toString())), lstChiTietPhieuMuon)) {
 						JOptionPane.showMessageDialog(null, "Sách đã có trong giỏ !");
 					} else {
 						int posSach = BookBo.findPosInArraybyId(Integer.valueOf(md.getValueAt(row, 0).toString()), lstBook);
@@ -305,11 +320,110 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		});
 		btnAddBook.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/add-to-cart.png")));
 		btnAddBook.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		btnAddBook.setBounds(478, 564, 118, 30);
+		btnAddBook.setBounds(478, 668, 118, 30);
 		contentPane.add(btnAddBook);
 		
+		dateTo = new JDateChooser();
+		dateTo.getCalendarButton().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lbDateOutofBound.setVisible(false);
+				isCommit = false;
+			}
+		});
+		
+		dateTo.addInputMethodListener(new InputMethodListener() {
+			public void caretPositionChanged(InputMethodEvent event) {
+			}
+			public void inputMethodTextChanged(InputMethodEvent event) {
+				lbDateOutofBound.setVisible(false);
+				isCommit = false;
+			}
+		});
+		dateTo.setBounds(343, 239, 253, 25);
+		contentPane.add(dateTo);
+		dateFrom = new JDateChooser();
+		dateFrom.addInputMethodListener(new InputMethodListener() {
+			public void caretPositionChanged(InputMethodEvent event) {
+			}
+			public void inputMethodTextChanged(InputMethodEvent event) {
+				lbDateOutofBound.setVisible(false);
+				isCommit = false;
+			}
+		});
+		dateFrom.getCalendarButton().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				lbDateOutofBound.setVisible(false);
+				isCommit = false;
+			}
+		});
+		dateFrom.setBounds(20, 239, 244, 25);
+		contentPane.add(dateFrom);
+		dateFrom.setDateFormatString("dd/MM/yyyy");
+		dateTo.setDateFormatString("dd/MM/yyyy");
+		
+		
+		dateFrom.setDate(phieuMuon.getNgayMuon());
+		if (phieuMuon.getNgayTra() != null)
+			dateTo.setDate(phieuMuon.getNgayTra());
+		
+		JLabel lblNgyMn = new JLabel("Ngày mượn");
+		lblNgyMn.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/deadline.png")));
+		lblNgyMn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblNgyMn.setBounds(20, 222, 118, 16);
+		contentPane.add(lblNgyMn);
+		
+		JLabel lblNgyTr = new JLabel("Ngày trả");
+		lblNgyTr.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/deadline.png")));
+		lblNgyTr.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblNgyTr.setBounds(343, 222, 74, 16);
+		contentPane.add(lblNgyTr);
+		
+		cbStatus = new JComboBox();
+		cbStatus.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				isCommit = false;
+			}
+		});
+		cbStatus.setBounds(121, 282, 143, 22);
+		contentPane.add(cbStatus);
+		
+		JLabel lblTrangThai = new JLabel("Trạng thái");
+		lblTrangThai.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/complete.png")));
+		lblTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblTrangThai.setBounds(20, 284, 91, 16);
+		contentPane.add(lblTrangThai);
+		cbStatus.addItem("Chưa trả");
+		cbStatus.addItem("Đã trả");
+		
+		cbStatus.setSelectedIndex(phieuMuon.getTrangThai() ? 1 : 0);
+		
+		JButton btnQuayLi = new JButton("Quay Lại");
+		btnQuayLi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wantToSave();
+			}
+		});
+		btnQuayLi.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/return.png")));
+		btnQuayLi.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		btnQuayLi.setBounds(140, 668, 110, 30);
+		contentPane.add(btnQuayLi);
+		
+		lbDateOutofBound = new JLabel("Ngày trả phải lớn hơn ngày mượn");
+		lbDateOutofBound.setBackground(Color.RED);
+		lbDateOutofBound.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lbDateOutofBound.setBounds(423, 222, 186, 16);
+		lbDateOutofBound.setForeground(Color.RED);
+		lbDateOutofBound.setVisible(false);
+		contentPane.add(lbDateOutofBound);
 	}
 	
+	public boolean check_date() {
+		if (dateTo.getDate() != null) {
+			System.out.println(dateFrom.getDate().toString() + ";" + dateTo.getDate().toString() + ";" + dateTo.getDate().after(dateFrom.getDate()));
+			return dateTo.getDate().after(dateFrom.getDate());
+		}
+		return true;
+	}
 	public void loadTableSach(ArrayList<Book> lst) {
 		DefaultTableModel dtm = new DefaultTableModel();
 		dtm.addColumn("Mã sách");
@@ -354,35 +468,65 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		tableDSMuon.setRowHeight(30);
 	}
 	
-	private void conFirm() {
-		for (ChiTietPhieuMuon ch : lstChiTietPhieuMuon) {
-			ChiTietPhieuMuonBo.updateChiTietPhieuMuon(ch.getMaPhieuMuon(), ch.getMaSach(), ch.getSoLuong());
+	public void updatePhieuMuon() {
+		String s = cbStatus.getSelectedItem().toString();
+		if (s.equals("Chưa trả"))
+			phieuMuon.setTrangThai(false);
+		else 
+			phieuMuon.setTrangThai(true);
+		
+		phieuMuon.setNgayMuon(dateFrom.getDate());
+		Date dto = dateTo.getDate();
+		if (dto != null) {
+			phieuMuon.setNgayTra(dto);
 		}
+		PhieuMuonBo.updatePhieuMuon(phieuMuon);
+	}
+	
+	public void updateChiTietPhieuMuon() {
+		for (ChiTietPhieuMuon ch : lstChiTietPhieuMuon) {
+			
+			ChiTietPhieuMuonBo.updateChiTietPhieuMuon(phieuMuon, BookBo.findByBookId(ch.getMaSach()), ch.getSoLuong());
+		}
+	}
+	private void confirm() {
+		updatePhieuMuon();
+		updateChiTietPhieuMuon();
+		parent.loadTableListPhieuMuon();
 	}
 	
 	public void reloadTableDsMuon() {
-		lstChiTietPhieuMuon = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon.getMaPhieuMuon());
+		lstChiTietPhieuMuon = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon);
 		loadTableDsMuon(lstChiTietPhieuMuon);
 	}
 	public void reloadTableListBook() {
 		lstBook = BookBo.getAllBook();
 		loadTableSach(lstBook);
 	}
+	
+	public void wantToSave() {
+		if (!isCommit) {
+			int op = JOptionPane.showConfirmDialog(null, "Xác nhận lưu ?");
+			if (op == 0) {
+				if (check_date()) {
+					confirm();
+				} else {
+					lbDateOutofBound.setVisible(true);
+				}
+			} 
+			if (op != 2 && check_date()) {
+				thisFrm.dispose();
+			}
+			
+		} else {
+			thisFrm.dispose();
+		}
+	}
 	public FormChinhSuaPhieuMuon(PhieuMuon pm, PanelPhieuMuon pr) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (!isCommit) {
-					int op = JOptionPane.showConfirmDialog(null, "Xác nhận lưu ?");
-					if (op == 0) {
-						conFirm();
-					} 
-					if (op != 2) {
-						thisFrm.dispose();
-					}
-				} else {
-					thisFrm.dispose();
-				}
+				wantToSave();
 			}
 		});
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

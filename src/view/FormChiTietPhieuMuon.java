@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import bean.ChiTietPhieuMuon;
 import bean.DocGia;
@@ -44,6 +45,7 @@ public class FormChiTietPhieuMuon extends JFrame {
 	private JTextField txtThoiHan;
 	private ArrayList<ChiTietPhieuMuon> lst;
 	private JTable table;
+	private JTextField txtTrangThai;
 	/**
 	 * Launch the application.
 	 */
@@ -55,7 +57,7 @@ public class FormChiTietPhieuMuon extends JFrame {
 		setTitle("Chi Tiết Phiếu Mượn");
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		setResizable(false);
-		setBounds(100, 100, 830, 493);
+		setBounds(100, 100, 830, 475);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -92,25 +94,25 @@ public class FormChiTietPhieuMuon extends JFrame {
 //		txtTenKhachHang.setColumns(10);
 		txtTenKhachHang.getCaret().setVisible(false);
 		txtTenKhachHang.setText(docGia.getHoTen());
-		txtTenKhachHang.setBounds(20, 190, 233, 25);
+		txtTenKhachHang.setBounds(20, 179, 233, 25);
 		contentPane.add(txtTenKhachHang);
 		
 		JLabel lblTenKhachHang = new JLabel("Tên khách hàng");
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		lblTenKhachHang.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/id-card.png")));
-		lblTenKhachHang.setBounds(20, 170, 118, 16);
+		lblTenKhachHang.setBounds(20, 159, 118, 16);
 		contentPane.add(lblTenKhachHang);
 		
 		JLabel lblPhone = new JLabel("Số điện thoại");
 		lblPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblPhone.setBounds(20, 237, 118, 16);
+		lblPhone.setBounds(20, 215, 118, 16);
 		lblPhone.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/phone-call.png")));
 		contentPane.add(lblPhone);
 		
 		txtPhone = new JTextField();
 		txtPhone.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtPhone.setEditable(false);
-		txtPhone.setBounds(20, 257, 233, 25);
+		txtPhone.setBounds(20, 235, 233, 25);
 		txtPhone.setText(docGia.getSoDienThoai());
 		txtPhone.getCaret().setVisible(false);
 		contentPane.add(txtPhone);
@@ -132,7 +134,7 @@ public class FormChiTietPhieuMuon extends JFrame {
 			}
 		});
 		btnInHoaDon.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		btnInHoaDon.setBounds(45, 380, 176, 36);
+		btnInHoaDon.setBounds(43, 396, 176, 33);
 		btnInHoaDon.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/printer.png")));
 		contentPane.add(btnInHoaDon);
 		
@@ -144,14 +146,14 @@ public class FormChiTietPhieuMuon extends JFrame {
 		JLabel lblThoiGian = new JLabel("Thời hạn mượn");
 		lblThoiGian.setIcon(new ImageIcon("C:\\Users\\doan2\\eclipse-workspace\\library_management\\src\\icons\\deadline.png"));
 		lblThoiGian.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblThoiGian.setBounds(20, 305, 118, 16);
+		lblThoiGian.setBounds(20, 271, 118, 16);
 		contentPane.add(lblThoiGian);
 		
 		txtThoiHan = new JTextField();
 		txtThoiHan.setText((String) null);
 		txtThoiHan.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		txtThoiHan.setEditable(false);
-		txtThoiHan.setBounds(20, 325, 233, 25);
+		txtThoiHan.setBounds(20, 291, 233, 25);
 		String ngayTra = "?";
 		try {
 			ngayTra = phieuMuon.getNgayTra().toString();
@@ -162,7 +164,7 @@ public class FormChiTietPhieuMuon extends JFrame {
 		contentPane.add(txtThoiHan);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(282, 123, 522, 289);
+		scrollPane.setBounds(282, 123, 522, 251);
 		contentPane.add(scrollPane);
 		
 		table = new JTable() {
@@ -172,6 +174,18 @@ public class FormChiTietPhieuMuon extends JFrame {
 		};
 		scrollPane.setRowHeaderView(table);
 		scrollPane.setViewportView(table);
+		
+		txtTrangThai = new JTextField();
+		txtTrangThai.setText(phieuMuon.getTrangThai() ? "Đã trả" : "Chưa trả");
+		txtTrangThai.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		txtTrangThai.setEditable(false);
+		txtTrangThai.setBounds(20, 347, 233, 25);
+		contentPane.add(txtTrangThai);
+		JLabel lblTrngThi = new JLabel("Trạng Thái");
+		lblTrngThi.setIcon(new ImageIcon(FormChiTietPhieuMuon.class.getResource("/icons/complete.png")));
+		lblTrngThi.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lblTrngThi.setBounds(20, 327, 118, 16);
+		contentPane.add(lblTrngThi);
 	}
 	
 	public void loadTable(ArrayList<ChiTietPhieuMuon> lst) {
@@ -189,6 +203,7 @@ public class FormChiTietPhieuMuon extends JFrame {
 			dtm.addRow(o);
 		}
 		table.setModel(dtm);
+		setJTableColumnsWidth(table, 522 , 10, 40, 20, 30);
 	}
 	
 	public FormChiTietPhieuMuon(Integer ma, Integer maKH, Integer maTT) {
@@ -197,7 +212,19 @@ public class FormChiTietPhieuMuon extends JFrame {
 		this.thuThu = ThuThuBo.getThuThuByMaThuThu(maTT);
 		this.phieuMuon = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(ma);
 		content();
-		lst = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon.getMaPhieuMuon());
+		lst = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon);
 		loadTable(lst);
+	}
+	
+	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
+	    double total = 0;
+	    for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+	        total += percentages[i];
+	    }
+	 
+	    for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+	        TableColumn column = table.getColumnModel().getColumn(i);
+	        column.setPreferredWidth((int)(tablePreferredWidth * (percentages[i] / total)));
+	    }
 	}
 }

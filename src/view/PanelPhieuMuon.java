@@ -36,6 +36,7 @@ public class PanelPhieuMuon extends JPanel {
 	private FormChiTietPhieuMuon frmChiTietPhieuMuon;
 	private FormTaoPhieuMuon frmTaoPM;
 	private PanelPhieuMuon thisPanel = this;
+	private FormFindPhieuMuon frmFindPM;
 	/**
 	 * Create the panel.
 	 */
@@ -81,7 +82,7 @@ public class PanelPhieuMuon extends JPanel {
 			oj[0] = pm.getMaPhieuMuon();
 			oj[1] = pm.getNgayMuon();
 			oj[2] = pm.getNgayTra();
-			oj[3] = pm.getTrangThai();
+			oj[3] = pm.getTrangThai() ? "Đã trả" : "Chưa trả";
 			oj[4] = pm.getMaDocGia();
 			oj[5] = pm.getMaThuThu();
 			tb.addRow(oj);
@@ -140,7 +141,7 @@ public class PanelPhieuMuon extends JPanel {
 		});
 		
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(664, 21, 141, 30);
+		buttonAdd.setBounds(553, 21, 141, 30);
 		add(buttonAdd);
 		
 		JButton btnDelete = new JButton("Xoá");
@@ -179,6 +180,17 @@ public class PanelPhieuMuon extends JPanel {
 		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnEdit.setBounds(815, 21, 100, 30);
 		add(btnEdit);
+		
+		JButton btnSearch = new JButton("Tìm kiếm");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmFindPM = new FormFindPhieuMuon(thisPanel);
+				frmFindPM.setVisible(true);
+			}
+		});
+		btnSearch.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnSearch.setBounds(704, 21, 100, 30);
+		add(btnSearch);
 	}
 	
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {

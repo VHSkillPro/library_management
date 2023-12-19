@@ -1,5 +1,6 @@
 package bo;
 import java.util.ArrayList;
+import java.util.Date;
 
 import bean.PhieuMuon;
 import dao.PhieuMuonDao;
@@ -25,5 +26,11 @@ public class PhieuMuonBo {
 	}
 	static public Boolean deletePhieuMuon(PhieuMuon phieuMuon) {
 		return PhieuMuonDao.deletePhieuMuon(phieuMuon);
+	}
+	static public int updatePhieuMuon(PhieuMuon pm) {
+		return PhieuMuonDao.updatePhieuMuon(pm);
+	}
+	static public ArrayList<PhieuMuon> findPhieuMuon(String maPm, int trangThai, Date from, Date to, String maTT, String maKH) {
+		return PhieuMuonDao.findPhieuMuon(maPm, trangThai, from, to, maTT, maKH);
 	}
 }

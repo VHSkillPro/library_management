@@ -1,32 +1,37 @@
 package bo;
 import java.util.ArrayList;
 
+import bean.Book;
 import bean.ChiTietPhieuMuon;
+import bean.PhieuMuon;
 import dao.ChiTietPhieuMuonDao;
 
 public class ChiTietPhieuMuonBo {
-	static public ArrayList<ChiTietPhieuMuon> getCTPMByMaPhieuMuon(int maPM) {
+	static public ArrayList<ChiTietPhieuMuon> getCTPMByMaPhieuMuon(PhieuMuon maPM) {
 		return ChiTietPhieuMuonDao.getCTPMByMaPhieuMuon(maPM);
 	}
-	static public boolean checkDupicate(int ma, ArrayList<ChiTietPhieuMuon> lst) {
+	static public boolean checkDupicate(Book b, ArrayList<ChiTietPhieuMuon> lst) {
 		for (ChiTietPhieuMuon l : lst) {
-			if (l.getMaSach() == ma && l.getSoLuong() > 0) {
+			if (l.getMaSach() == b.getMaSach() && l.getSoLuong() > 0) {
 				return true;
 			}
 		}
 		return false;
 	}
-	static public int updateChiTietPhieuMuon(int maPm, int maSach, int sl) {
-		return ChiTietPhieuMuonDao.updateChiTietPhieuMuon(maPm, maSach, sl);
+	static public int updateChiTietPhieuMuon(PhieuMuon pm, Book b, int sl) {
+		return ChiTietPhieuMuonDao.updateChiTietPhieuMuon(pm, b, sl);
 	}
-	static public ChiTietPhieuMuon getCTPMByMaPhieuMuonandMaSach(int maPm, int maSach) {
-		return ChiTietPhieuMuonDao.getCTPMByMaPhieuMuonandMaSach(maPm, maSach);
+	static public ChiTietPhieuMuon getCTPMByMaPhieuMuonandMaSach(PhieuMuon pm, Book b) {
+		return ChiTietPhieuMuonDao.getCTPMByMaPhieuMuonandMaSach(pm, b);
 	}
-	static public int getPosInArraybyId(int maPm, int maSach, ArrayList<ChiTietPhieuMuon> lst) {
+	static public int insertChiTietPhieuMuon(PhieuMuon pm, Book b) {
+		return ChiTietPhieuMuonDao.insertChiTietPhieuMuon(pm, b);
+	}
+	static public int getPosInArraybyId(PhieuMuon pm, Book b, ArrayList<ChiTietPhieuMuon> lst) {
 		int pos = -1;
 		for (int i = 0; i < lst.size(); i++) {
 			ChiTietPhieuMuon ct = lst.get(i);
-			if (ct.getMaPhieuMuon() == maPm && ct.getMaSach() == maSach) {
+			if (ct.getMaPhieuMuon() == pm.getMaPhieuMuon() && ct.getMaSach() == b.getMaSach()) {
 				pos = i;
 				break;
 			}
