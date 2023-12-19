@@ -59,7 +59,7 @@ public class PanelPhieuMuon extends JPanel {
 			oj[0] = pm.getMaPhieuMuon();
 			oj[1] = pm.getNgayMuon();
 			oj[2] = pm.getNgayTra();
-			oj[3] = pm.getTrangThai();
+			oj[3] = pm.getTrangThai() ? "Đã trả" : "Chưa trả";
 			oj[4] = pm.getMaDocGia();
 			oj[5] = pm.getMaThuThu();
 			tb.addRow(oj);
@@ -140,13 +140,8 @@ public class PanelPhieuMuon extends JPanel {
 		});
 		
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(551, 21, 141, 30);
+		buttonAdd.setBounds(664, 21, 141, 30);
 		add(buttonAdd);
-		
-		JButton buttonFind = new JButton("Tìm kiếm");
-		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonFind.setBounds(705, 21, 100, 30);
-		add(buttonFind);
 		
 		JButton btnDelete = new JButton("Xoá");
 		btnDelete.addActionListener(new ActionListener() {

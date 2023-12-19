@@ -17,7 +17,7 @@ public class PhieuMuonDao {
 			while (rs.next()) {
 				int maPhieuMuon = rs.getInt("maPhieuMuon");
 				Date ngayMuon = rs.getDate("ngayMuon"), ngayTra = rs.getDate("ngayTra");
-				int trangThai = rs.getInt("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				int maDocGia = rs.getInt("maDocGia");
 				int maThuThu = rs.getInt("maThuThu");
 				listPhieuMuon.add(new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, trangThai, maDocGia, maThuThu));
@@ -38,7 +38,7 @@ public class PhieuMuonDao {
 			while (rs.next()) {
 				int maPhieuMuon = rs.getInt("maPhieuMuon");
 				Date ngayMuon = rs.getDate("ngayMuon"), ngayTra = rs.getDate("ngayTra");
-				int trangThai = rs.getInt("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				int maDocGia = rs.getInt("maDocGia");
 				int maThuThu = rs.getInt("maThuThu");
 				listPhieuMuon.add(new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, trangThai, maDocGia, maThuThu));
@@ -59,7 +59,7 @@ public class PhieuMuonDao {
 			if (rs.next()) {
 				int maPhieuMuon = rs.getInt("maPhieuMuon");
 				Date ngayMuon = rs.getDate("ngayMuon"), ngayTra = rs.getDate("ngayTra");
-				int trangThai = rs.getInt("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				int maDocGia = rs.getInt("maDocGia");
 				int maThuThu = rs.getInt("maThuThu");
 				res = new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, trangThai, maDocGia, maThuThu);
@@ -76,7 +76,7 @@ public class PhieuMuonDao {
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setInt(1, phieuMuon.getMaDocGia());
 			stmt.setInt(2, phieuMuon.getMaThuThu());
-			stmt.setInt(3, phieuMuon.getTrangThai());
+			stmt.setBoolean(3, phieuMuon.getTrangThai());
 			int cl = stmt.executeUpdate();
 			return cl > 0;
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class PhieuMuonDao {
 	
 	static public Boolean deletePhieuMuon(PhieuMuon phieuMuon) {
 		try {
-			String sql = "DELETE FROM vw_PhieuMuon WHERE maPhieuMuon = ?";
+			String sql = "DELETE FROM PhieuMuon WHERE maPhieuMuon = ?";
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
 			stmt.setInt(1, phieuMuon.getMaPhieuMuon());
 			int cl = stmt.executeUpdate();
@@ -100,13 +100,13 @@ public class PhieuMuonDao {
 	static public PhieuMuon getLastestInsert() {
 		PhieuMuon pm = null;
 		try {
-			String sql = "SELECT TOP 1 * FROM vw_PhieuMuon ORDER BY maPhieuMuon DESC";
+			String sql = "SELECT TOP 1 * FROM PhieuMuon ORDER BY maPhieuMuon DESC";
 			PreparedStatement ps = Database.getConnection().prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				int maPhieuMuon = rs.getInt("maPhieuMuon");
 				Date ngayMuon = rs.getDate("ngayMuon"), ngayTra = rs.getDate("ngayTra");
-				int trangThai = rs.getInt("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				int maDocGia = rs.getInt("maDocGia");
 				int maThuThu = rs.getInt("maThuThu");
 				pm = new PhieuMuon(maPhieuMuon, ngayMuon, ngayTra, trangThai, maDocGia, maThuThu);

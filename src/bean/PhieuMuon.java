@@ -5,14 +5,14 @@ import java.util.Date;
 public class PhieuMuon {
 	private int maPhieuMuon;
 	private Date ngayMuon, ngayTra;
-	private int trangThai;
+	private boolean trangThai;
 	private int maDocGia;
 	private int maThuThu;
 	public PhieuMuon() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public PhieuMuon(int maPhieuMuon, Date ngayMuon, Date ngayTra, int trangThai, int maDocGia, int maThuThu) {
+	public PhieuMuon(int maPhieuMuon, Date ngayMuon, Date ngayTra, boolean trangThai, int maDocGia, int maThuThu) {
 		super();
 		this.maPhieuMuon = maPhieuMuon;
 		this.ngayMuon = ngayMuon;
@@ -39,10 +39,10 @@ public class PhieuMuon {
 	public void setNgayTra(Date ngayTra) {
 		this.ngayTra = ngayTra;
 	}
-	public int getTrangThai() {
+	public boolean getTrangThai() {
 		return trangThai;
 	}
-	public void setTrangThai(int trangThai) {
+	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
 	public int getMaDocGia() {

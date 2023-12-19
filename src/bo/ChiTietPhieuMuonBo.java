@@ -22,4 +22,15 @@ public class ChiTietPhieuMuonBo {
 	static public ChiTietPhieuMuon getCTPMByMaPhieuMuonandMaSach(int maPm, int maSach) {
 		return ChiTietPhieuMuonDao.getCTPMByMaPhieuMuonandMaSach(maPm, maSach);
 	}
+	static public int getPosInArraybyId(int maPm, int maSach, ArrayList<ChiTietPhieuMuon> lst) {
+		int pos = -1;
+		for (int i = 0; i < lst.size(); i++) {
+			ChiTietPhieuMuon ct = lst.get(i);
+			if (ct.getMaPhieuMuon() == maPm && ct.getMaSach() == maSach) {
+				pos = i;
+				break;
+			}
+		}
+		return pos;
+	}
 }

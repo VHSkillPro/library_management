@@ -98,12 +98,8 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		JButton btnConfirm = new JButton("Xác Nhận");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Database.getConnection().commit();
-					thisFrm.dispose();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				conFirm();
+				thisFrm.dispose();
 			}
 		});
 		btnConfirm.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -223,10 +219,14 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 					isCommit = false;
 					TableModel md = tableDSMuon.getModel();
 					int maSach = Integer.valueOf(md.getValueAt(row, 0).toString());
-					ChiTietPhieuMuon ch = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuonandMaSach(phieuMuon.getMaPhieuMuon(), maSach);
-					ChiTietPhieuMuonBo.updateChiTietPhieuMuon(ch.getMaPhieuMuon(), ch.getMaSach(), 0);
-					reloadTableDsMuon();
-					reloadTableListBook();
+					int posSach = BookBo.findPosInArraybyId(maSach, lstBook);
+					int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon.getMaPhieuMuon(), maSach, lstChiTietPhieuMuon);
+					
+					lstBook.get(posSach).setSoLuong(lstBook.get(posSach).getSoLuong() + lstChiTietPhieuMuon.get(posCTPM).getSoLuong());
+					lstChiTietPhieuMuon.remove(posCTPM);
+
+					loadTableDsMuon(lstChiTietPhieuMuon);
+					loadTableSach(lstBook);
 				}
 			}
 		});
@@ -255,12 +255,16 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 						TableModel md = tableDSMuon.getModel();
 						int maSach = Integer.valueOf(md.getValueAt(row, 0).toString());
 						int cur = Integer.valueOf(md.getValueAt(row, 3).toString());
-						Book hv = BookBo.findByBookId(maSach);
+						int pos = BookBo.findPosInArraybyId(maSach, lstBook);
+						
+						int posCTPM = ChiTietPhieuMuonBo.getPosInArraybyId(phieuMuon.getMaPhieuMuon(), maSach, lstChiTietPhieuMuon);
+						
+						Book hv = lstBook.get(pos);
 						if (hv.getSoLuong() + cur >= num) {
-							ChiTietPhieuMuon ch = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuonandMaSach(phieuMuon.getMaPhieuMuon(), maSach);
-							ChiTietPhieuMuonBo.updateChiTietPhieuMuon(ch.getMaPhieuMuon(), ch.getMaSach(), num);
-							reloadTableDsMuon();
-							reloadTableListBook();
+							lstBook.get(pos).setSoLuong(hv.getSoLuong() - num + cur);
+							lstChiTietPhieuMuon.get(posCTPM).setSoLuong(num);
+							loadTableDsMuon(lstChiTietPhieuMuon);
+							loadTableSach(lstBook);
 						} else {
 							JOptionPane.showMessageDialog(null, "Số lượng không hợp lệ !");
 						}
@@ -268,6 +272,7 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 				}
 			}
 		});
+		
 		btnAdjust.setIcon(new ImageIcon(FormChinhSuaPhieuMuon.class.getResource("/icons/maths.png")));
 		btnAdjust.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		btnAdjust.setBounds(641, 564, 149, 30);
@@ -284,12 +289,14 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 					if (ChiTietPhieuMuonBo.checkDupicate(Integer.valueOf(md.getValueAt(row, 0).toString()), lstChiTietPhieuMuon)) {
 						JOptionPane.showMessageDialog(null, "Sách đã có trong giỏ !");
 					} else {
-						int r = ChiTietPhieuMuonBo.updateChiTietPhieuMuon(phieuMuon.getMaPhieuMuon(), Integer.valueOf(md.getValueAt(row, 0).toString()), 1);
-						if (r == -1) {
+						int posSach = BookBo.findPosInArraybyId(Integer.valueOf(md.getValueAt(row, 0).toString()), lstBook);
+						if (lstBook.get(posSach).getSoLuong() == 0) {
 							JOptionPane.showMessageDialog(null, "Không đủ số lượng !");
 						} else {
-							reloadTableDsMuon();
-							reloadTableListBook();
+							lstBook.get(posSach).setSoLuong(lstBook.get(posSach).getSoLuong() - 1);
+							lstChiTietPhieuMuon.add(new ChiTietPhieuMuon(phieuMuon.getMaPhieuMuon(), lstBook.get(posSach).getMaSach(), 1));
+							loadTableDsMuon(lstChiTietPhieuMuon);
+							loadTableSach(lstBook);
 							isCommit = false;
 						}
 					}
@@ -347,6 +354,12 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		tableDSMuon.setRowHeight(30);
 	}
 	
+	private void conFirm() {
+		for (ChiTietPhieuMuon ch : lstChiTietPhieuMuon) {
+			ChiTietPhieuMuonBo.updateChiTietPhieuMuon(ch.getMaPhieuMuon(), ch.getMaSach(), ch.getSoLuong());
+		}
+	}
+	
 	public void reloadTableDsMuon() {
 		lstChiTietPhieuMuon = ChiTietPhieuMuonBo.getCTPMByMaPhieuMuon(phieuMuon.getMaPhieuMuon());
 		loadTableDsMuon(lstChiTietPhieuMuon);
@@ -359,24 +372,16 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				try {
-					if (!isCommit) {
-						int op = JOptionPane.showConfirmDialog(null, "Xác nhận lưu ?");
-						if (op == 0) {
-							Database.getConnection().commit();
-						} else if (op == 1) {
-							Database.getConnection().rollback();
-						}
-						if (op != 2) {
-							thisFrm.dispose();
-							Database.getConnection().setAutoCommit(true);
-						}
-					} else {
+				if (!isCommit) {
+					int op = JOptionPane.showConfirmDialog(null, "Xác nhận lưu ?");
+					if (op == 0) {
+						conFirm();
+					} 
+					if (op != 2) {
 						thisFrm.dispose();
 					}
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} else {
+					thisFrm.dispose();
 				}
 			}
 		});
@@ -388,12 +393,6 @@ public class FormChinhSuaPhieuMuon extends JFrame {
 		reloadTableDsMuon();
 		reloadTableListBook();
 		isCommit = true;
-		try {
-			Database.getConnection().setAutoCommit(false);
-			Database.getConnection().setSavepoint();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
 	}
 	
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {

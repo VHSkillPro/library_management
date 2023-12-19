@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import bean.Account;
 import dao.Database;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -34,9 +35,14 @@ public class FormHome extends JFrame {
 	private Account account;
 	private FormSignIn formSignIn;
 	private FormHome thisForm = this;
+
 	private JPanel panelContent;
 	private PanelBook panelBook;
 	private PanelPhieuMuon panelPhieuMuon;
+
+	private PanelAccount panelAccount;
+	private PanelDocGia panelDocGia;
+
 	
 	/**
 	 * Launch the application.
@@ -121,13 +127,15 @@ public class FormHome extends JFrame {
 		panelMenu.setLayout(null);
 		
 		JButton buttonMenu1 = new JButton("Sách");
-		buttonMenu1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		buttonMenu1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelAccount.setVisible(false);
+				panelDocGia.setVisible(false);
 				panelPhieuMuon.setVisible(false);
 				panelBook.setVisible(true);
 			}
 		});
+
 		buttonMenu1.setBorderPainted(false);
 		buttonMenu1.setBackground(new Color(240, 240, 240));
 		buttonMenu1.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -154,6 +162,13 @@ public class FormHome extends JFrame {
 		panelMenu.add(buttonMenu2);
 		
 		JButton buttonMenu3 = new JButton("Độc giả");
+		buttonMenu3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBook.setVisible(false);
+				panelAccount.setVisible(false);
+				panelDocGia.setVisible(true);
+			}
+		});
 		buttonMenu3.setBorderPainted(false);
 		buttonMenu3.setBackground(new Color(240, 240, 240));
 		buttonMenu3.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -161,6 +176,13 @@ public class FormHome extends JFrame {
 		panelMenu.add(buttonMenu3);
 		
 		buttonMenu4 = new JButton("Tài khoản");
+		buttonMenu4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBook.setVisible(false);
+				panelDocGia.setVisible(false);
+				panelAccount.setVisible(true);
+			}
+		});
 		buttonMenu4.setBorderPainted(false);
 		buttonMenu4.setBackground(new Color(240, 240, 240));
 		buttonMenu4.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -184,6 +206,16 @@ public class FormHome extends JFrame {
 		panelPhieuMuon.setBounds(230, 0, 1035, 680);
 		panelPhieuMuon.setVisible(false);
 		contentPane.add(panelPhieuMuon);
+
+		panelAccount = new PanelAccount();
+		panelAccount.setBounds(230, 0, 1035, 680);
+		panelAccount.setVisible(false);
+		contentPane.add(panelAccount);
+		
+		panelDocGia = new PanelDocGia();
+		panelDocGia.setBounds(230, 0, 1035, 680);
+		panelDocGia.setVisible(false);
+		contentPane.add(panelDocGia);
 	}
 	
 	public void setAccount(Account account) {
