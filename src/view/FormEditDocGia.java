@@ -230,8 +230,8 @@ public class FormEditDocGia extends JFrame {
 		contentPane.add(separator);
 		
 		buttonEditEnable = new JButton("Chỉnh sửa");
-		buttonEditEnable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonEditEnable.setBounds(370, 70, 90, 25);
+		buttonEditEnable.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		buttonEditEnable.setBounds(240, 320, 120, 30);
 		contentPane.add(buttonEditEnable);
 		
 		buttonExist = new JButton("Quay lại");
@@ -241,7 +241,7 @@ public class FormEditDocGia extends JFrame {
 			}
 		});
 		buttonExist.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		buttonExist.setBounds(200, 320, 100, 30);
+		buttonExist.setBounds(130, 320, 100, 30);
 		contentPane.add(buttonExist);
 	}
 }

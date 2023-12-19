@@ -35,17 +35,27 @@ public class PanelDocGia extends JPanel {
 	private FormEditDocGia formEdit;
 	private PanelDocGia thisPanel = this;
 	private FormFindDocGia formFind;
+	private FormAddDocGia formAdd;
 	
 	/**
 	 * Create the panel.
 	 */
 	public PanelDocGia() {
 		createContents();
+		themDocGia();
 		findDocGia();
 		clickRow();
 		reloadTable();
 		deleteRow();
 		loadTable(DocGiaBo.getAllDocGia());
+	}
+	
+	public void themDocGia() {
+		buttonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formAdd.setVisible(true);
+			}
+		});
 	}
 	
 	public void findDocGia() {
@@ -164,6 +174,7 @@ public class PanelDocGia extends JPanel {
 		add(buttonReload);
 		
 		formFind = new FormFindDocGia(thisPanel);
+		formAdd = new FormAddDocGia(thisPanel);
 	}
 
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
