@@ -160,4 +160,49 @@ public class BookDao {
 		}
 		return null;
 	}
+	static public ArrayList<Book> findBookbyAuthor(String tacGia) {
+		try {
+			ArrayList<Book> lst = getAllBook();
+			ArrayList<Book> ans = new ArrayList<Book>();
+			for (Book x : lst) {
+				if (x.getTacGia().toLowerCase().trim().contains(tacGia.toLowerCase().trim())) {
+					ans.add(x);
+				}
+			}
+			return ans;
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		return null;
+	}
+	static public ArrayList<Book> findBookbyNXB(String NXB) {
+		try {
+			ArrayList<Book> lst = getAllBook();
+			ArrayList<Book> ans = new ArrayList<Book>();
+			for (Book x : lst) {
+				if (x.getNhaXuatBan().toLowerCase().trim().contains(NXB.toLowerCase().trim())) {
+					ans.add(x);
+				}
+			}
+			return ans;
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		return null;
+	}
+	static public ArrayList<Book> findBookbyType(String type) {
+		try {
+			ArrayList<Book> lst = getAllBook();
+			ArrayList<Book> ans = new ArrayList<Book>();
+			for (Book x : lst) {
+				if (x.getTheLoai().toLowerCase().trim().contains(type.toLowerCase().trim())) {
+					ans.add(x);
+				}
+			}
+			return ans;
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		return null;
+	}
 }

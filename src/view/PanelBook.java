@@ -28,6 +28,7 @@ public class PanelBook extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTable tableListBook;
 	private FormAddBook formAddBook = new FormAddBook(this);
+	private FormSearch formSearch = new FormSearch(this);
 	private PanelBook panelBook = this;
 	private FormUpdate formUpdate;
 	/**
@@ -124,20 +125,7 @@ public class PanelBook extends JPanel {
 		JButton buttonFind = new JButton("Tìm kiếm");
 		buttonFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Integer bookId = Integer.parseInt(JOptionPane.showInputDialog("Vui lòng nhập mã sách cần tìm"));
-				Book books = BookBo.findByBookId(bookId);
-				if (books == null) {
-					JOptionPane.showMessageDialog(null, "Không tìm thấy sách");
-				}
-				else {
-					try {
-						ArrayList<Book> lst = new ArrayList<Book>();
-						lst.add(books);
-						loadTable(lst);
-					} catch (Exception e2) {
-						e2.getStackTrace();
-					}
-				}
+				formSearch.setVisible(true);
  			}
 		});
 		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));

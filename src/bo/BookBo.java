@@ -24,4 +24,13 @@ public class BookBo {
 	static public Book findByBookId(int bookId) {
 		return BookDao.findByBookId(bookId);
 	}
+	static public ArrayList<Book> findBookbyAuthor(String tacGia) {
+		return BookDao.findBookbyAuthor(tacGia);
+	}
+	static public ArrayList<Book> findBookbyNXB(String NXB) {
+		return BookDao.findBookbyNXB(NXB);
+	}
+	static public ArrayList<Book> findBookbyType(String type) {
+		return BookDao.findBookbyType(type);
+	}
 }
