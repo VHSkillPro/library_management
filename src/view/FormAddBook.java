@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import bean.Book;
 import bo.BookBo;
+import utils.Validate;
+import utils.ValidateElement;
 import utils.ValidateForm;
 
 import javax.swing.JLabel;
@@ -41,7 +43,7 @@ public class FormAddBook extends JFrame {
 	public FormAddBook(PanelBook parent) {
 		this.parent = parent;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 358, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -141,10 +143,29 @@ public class FormAddBook extends JFrame {
 				String theLoai = txttheLoai.getText();
 				Integer maThuThu = Integer.parseInt(txtMaThuThu.getText());
 //				
-//				for (int i = 0; i < 8; i++) {
-//					validateForm.add(new ValidateForm<String>());
-//				}
+				for (int i = 0; i < 8; i++) {
+					validateForm.add(new ValidateForm<String>());
+				}
 				
+//				validateForm.get(0).addElement(new ValidateElement<String>("Vui lòng nhập mã sách", str -> Validate.isExist(str)));
+//				validateForm.get(0).addElement(new ValidateElement<String>("Mã sách đã tồn tại", str -> BookBo.findByBookId(Integer.parseInt(str)) != null));
+//				validateForm.get(1).addElement(new ValidateElement<String>("Vui lòng nhập tên sách", str -> Validate.isExist(str)));
+//				validateForm.get(2).addElement(new ValidateElement<String>("Vui lòng nhập tác giả", str -> Validate.isExist(str)));
+//				validateForm.get(3).addElement(new ValidateElement<String>("Vui lòng nhập nhà xuất bản", str -> Validate.isExist(str)));
+//				validateForm.get(4).addElement(new ValidateElement<String>("Vui lòng nhập đơn giá", str -> Validate.isExist(str)));
+//				validateForm.get(4).addElement(new ValidateElement<String>("Đơn giá phải lớn hơn 0", str -> Integer.parseInt(str) < 0));
+//				validateForm.get(5).addElement(new ValidateElement<String>("Vui lòng nhập số lượng", str -> Validate.isExist(str)));
+//				validateForm.get(5).addElement(new ValidateElement<String>("Số lượng phải lớn hơn 0", str -> Integer.parseInt(str) < 0));
+//				validateForm.get(6).addElement(new ValidateElement<String>("Vui lòng nhập thể loại", str -> Validate.isExist(str)));
+//				validateForm.get(7).addElement(new ValidateElement<String>("Vui lòng nhập mã thủ thư", str -> Validate.isExist(str)));
+//				validateForm.get(0).validate(String.valueOf(maSach));
+//				validateForm.get(1).validate(tenSach);
+//				validateForm.get(2).validate(tacGia);
+//				validateForm.get(3).validate(nhaXuatBan);
+//				validateForm.get(4).validate(String.valueOf(donGia));
+//				validateForm.get(5).validate(String.valueOf(soLuong));
+//				validateForm.get(6).validate(theLoai);
+//				validateForm.get(7).validate(String.valueOf(maThuThu));
 				Book books = new Book(maSach, tenSach, tacGia, nhaXuatBan, donGia, soLuong, theLoai, maThuThu);
 				BookBo.insertBook(books);
 				try {

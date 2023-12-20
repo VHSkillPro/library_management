@@ -18,7 +18,7 @@ public class BookBo {
 	static public Boolean updateBook(Book books) {
 		return BookDao.updateBook(books);
 	}
-	static public Book findbyBookName(String name) {
+	static public ArrayList<Book> findbyBookName(String name) {
 		return BookDao.findByBookName(name);
 	}
 	static public Book findByBookId(int bookId) {

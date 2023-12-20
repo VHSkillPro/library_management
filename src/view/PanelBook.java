@@ -28,6 +28,8 @@ public class PanelBook extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTable tableListBook;
 	private FormAddBook formAddBook = new FormAddBook(this);
+	private PanelBook panelBook = this;
+	private FormUpdate formUpdate;
 	/**
 	 * Create the panel.
 	 */
@@ -77,13 +79,30 @@ public class PanelBook extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 //				int row = tableListBook.getSelectedRow();
 //				Book books;
-				
 			}
 		});
 		scrollPane.setBounds(10, 62, 1015, 608);
 		add(scrollPane);
 		
-		tableListBook = new JTable();
+		tableListBook  = new JTable() {
+			private static final long serialVersionUID = 1L;
+			public boolean editCellAt(int row, int colum, java.util.EventObject e) {
+				return false;
+			}
+		};
+		
+		
+		tableListBook.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int maSach = (int)tableListBook.getValueAt(tableListBook.getSelectedRow(), 0);
+					formUpdate = new FormUpdate(maSach, panelBook);
+					formUpdate.setVisible(true);
+					
+				}
+			}
+		});
 		scrollPane.setViewportView(tableListBook);
 //		scrollPane.setColumnHeaderView(tableListBook);
 		
@@ -99,7 +118,7 @@ public class PanelBook extends JPanel {
 			}
 		});
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(595, 20, 100, 30);
+		buttonAdd.setBounds(649, 21, 100, 30);
 		add(buttonAdd);
 		
 		JButton buttonFind = new JButton("Tìm kiếm");
@@ -122,20 +141,28 @@ public class PanelBook extends JPanel {
  			}
 		});
 		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonFind.setBounds(705, 20, 100, 30);
+		buttonFind.setBounds(790, 21, 100, 30);
 		add(buttonFind);
 		
 		JButton btnDelete = new JButton("Xoá");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int maSach = (int)tableListBook.getValueAt(tableListBook.getSelectedRow(), 0);
+				Book books = BookBo.findByBookId(maSach);
+				BookBo.deleteBook(books);
+				try {
+					ArrayList<Book> lst = BookBo.getAllBook();
+					loadTable(lst);
+				} catch (Exception e2) {
+					e2.getStackTrace();
+				}
+			}
+		});
 		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
 		
-		JButton btnEdit = new JButton("Chỉnh sửa");
-		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnEdit.setBounds(815, 20, 100, 30);
-		add(btnEdit);
-		
-		JButton btnListbook = new JButton("List book");
+		JButton btnListbook = new JButton("Load");
 		btnListbook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -146,8 +173,10 @@ public class PanelBook extends JPanel {
 				}
 			}
 		});
+		
+		
 		btnListbook.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnListbook.setBounds(481, 21, 100, 30);
+		btnListbook.setBounds(507, 21, 100, 30);
 		add(btnListbook);
 	}
 }
