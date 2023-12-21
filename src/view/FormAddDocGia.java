@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.SwingConstants;
 
 public class FormAddDocGia extends JFrame {
 
@@ -175,7 +176,7 @@ public class FormAddDocGia extends JFrame {
 						AccountBo.insertAccount(new Account(username, SHA256.getString(password), 0, new Date()));
 						DocGiaBo.insertDocGia(new DocGia(0, hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username));
 						JOptionPane.showMessageDialog(null, "Đăng ký độc giả thành công");
-						parent.reloadTable();
+						parent.loadTable(DocGiaBo.getAllDocGia());
 						thisForm.dispatchEvent(new WindowEvent(thisForm, WindowEvent.WINDOW_CLOSING));
 					}
 				} catch (Exception e1) {
@@ -189,7 +190,7 @@ public class FormAddDocGia extends JFrame {
 		setResizable(false);
 		setTitle("Thêm độc giả - Phần mềm quản lý thư viện");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 600, 450);
+		setBounds(100, 100, 600, 430);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -198,182 +199,189 @@ public class FormAddDocGia extends JFrame {
 		
 		JLabel labelSignUp = new JLabel("THÊM ĐỘC GIẢ");
 		labelSignUp.setFont(new Font("Segoe UI", Font.BOLD, 21));
-		labelSignUp.setBounds(220, 15, 160, 50);
+		labelSignUp.setBounds(220, 15, 160, 40);
 		contentPane.add(labelSignUp);
 		
 		JLabel labelUsername = new JLabel("Username");
 		labelUsername.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/user.png")));
 		labelUsername.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelUsername.setBounds(20, 95, 100, 16);
+		labelUsername.setBounds(20, 90, 100, 16);
 		contentPane.add(labelUsername);
 		
 		inputUsername = new JTextField();
 		labelUsername.setLabelFor(inputUsername);
 		inputUsername.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		inputUsername.setBounds(20, 115, 250, 25);
+		inputUsername.setBounds(20, 110, 250, 25);
 		contentPane.add(inputUsername);
 		inputUsername.setColumns(10);
 		
 		JLabel labelPassword = new JLabel("Password");
 		labelPassword.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/key.png")));
 		labelPassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelPassword.setBounds(20, 155, 100, 16);
+		labelPassword.setBounds(20, 150, 100, 16);
 		contentPane.add(labelPassword);
 		
 		inputPassword = new JPasswordField();
 		labelPassword.setLabelFor(inputPassword);
 		inputPassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		inputPassword.setBounds(20, 175, 250, 25);
+		inputPassword.setBounds(20, 170, 250, 25);
 		contentPane.add(inputPassword);
 		
 		inputFullName = new JTextField();
 		inputFullName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputFullName.setColumns(10);
-		inputFullName.setBounds(20, 295, 250, 25);
+		inputFullName.setBounds(20, 290, 250, 25);
 		contentPane.add(inputFullName);
 		
 		JLabel labelFullName = new JLabel("Họ và tên");
 		labelFullName.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/id-card.png")));
 		labelFullName.setLabelFor(inputFullName);
 		labelFullName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelFullName.setBounds(20, 275, 100, 16);
+		labelFullName.setBounds(20, 270, 100, 16);
 		contentPane.add(labelFullName);
 		
 		comboGender = new JComboBox<String>();
 		comboGender.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		comboGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
-		comboGender.setBounds(485, 115, 75, 25);
+		comboGender.setBounds(485, 110, 75, 25);
 		contentPane.add(comboGender);
 		
 		JLabel labelBirthday = new JLabel("Ngày sinh");
 		labelBirthday.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/date-of-birth.png")));
 		labelBirthday.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelBirthday.setBounds(310, 95, 100, 16);
+		labelBirthday.setBounds(310, 90, 100, 16);
 		contentPane.add(labelBirthday);
 		
 		JLabel labelGender = new JLabel("Giới tính");
 		labelGender.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/gender.png")));
 		labelGender.setLabelFor(comboGender);
 		labelGender.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelGender.setBounds(485, 97, 75, 16);
+		labelGender.setBounds(485, 90, 75, 16);
 		contentPane.add(labelGender);
 		
 		inputEmail = new JTextField();
 		inputEmail.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputEmail.setColumns(10);
-		inputEmail.setBounds(310, 175, 250, 25);
+		inputEmail.setBounds(310, 170, 250, 25);
 		contentPane.add(inputEmail);
 		
 		JLabel labelEmail = new JLabel("Email");
 		labelEmail.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/mail.png")));
 		labelEmail.setLabelFor(inputEmail);
 		labelEmail.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelEmail.setBounds(310, 155, 100, 16);
+		labelEmail.setBounds(310, 150, 100, 16);
 		contentPane.add(labelEmail);
 		
 		JLabel labelPhone = new JLabel("Số điện thoại");
 		labelPhone.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/phone-call.png")));
 		labelPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelPhone.setBounds(310, 215, 110, 16);
+		labelPhone.setBounds(310, 210, 110, 16);
 		contentPane.add(labelPhone);
 		
 		inputPhone = new JTextField();
 		labelPhone.setLabelFor(inputPhone);
 		inputPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputPhone.setColumns(10);
-		inputPhone.setBounds(310, 235, 250, 25);
+		inputPhone.setBounds(310, 230, 250, 25);
 		contentPane.add(inputPhone);
 		
 		inputAddress = new JTextField();
 		inputAddress.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		inputAddress.setColumns(10);
-		inputAddress.setBounds(310, 295, 250, 25);
+		inputAddress.setBounds(310, 290, 250, 25);
 		contentPane.add(inputAddress);
 		
 		JLabel labelAddress = new JLabel("Địa chỉ");
 		labelAddress.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/pin.png")));
 		labelAddress.setLabelFor(inputAddress);
 		labelAddress.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelAddress.setBounds(310, 275, 100, 16);
+		labelAddress.setBounds(310, 270, 100, 16);
 		contentPane.add(labelAddress);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(20, 75, 540, 2);
+		separator.setForeground(new Color(160, 160, 160));
+		separator.setBounds(20, 70, 540, 2);
 		contentPane.add(separator);
 		
 		buttonSignUp = new JButton("Thêm");
 		buttonSignUp.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/sign-up.png")));
 		buttonSignUp.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		buttonSignUp.setBounds(220, 340, 150, 40);
+		buttonSignUp.setBounds(220, 335, 150, 40);
 		contentPane.add(buttonSignUp);
 		
 		labelErrorUsername = new JLabel("");
 		labelErrorUsername.setVisible(false);
 		labelErrorUsername.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		labelErrorUsername.setForeground(Color.RED);
-		labelErrorUsername.setBounds(120, 95, 150, 16);
+		labelErrorUsername.setBounds(120, 90, 150, 16);
 		contentPane.add(labelErrorUsername);
 		
 		labelErrorEmail = new JLabel("");
 		labelErrorEmail.setVisible(false);
 		labelErrorEmail.setForeground(Color.RED);
 		labelErrorEmail.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorEmail.setBounds(410, 155, 150, 16);
+		labelErrorEmail.setBounds(410, 150, 150, 16);
 		contentPane.add(labelErrorEmail);
 		
 		labelErrorPhone = new JLabel("");
 		labelErrorPhone.setVisible(false);
 		labelErrorPhone.setForeground(Color.RED);
 		labelErrorPhone.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorPhone.setBounds(420, 215, 140, 16);
+		labelErrorPhone.setBounds(420, 210, 140, 16);
 		contentPane.add(labelErrorPhone);
 		
 		inputRepassword = new JPasswordField();
 		inputRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		inputRepassword.setBounds(20, 235, 250, 25);
+		inputRepassword.setBounds(20, 230, 250, 25);
 		contentPane.add(inputRepassword);
 		
 		JLabel labelRepassword = new JLabel("Re-Password");
 		labelRepassword.setLabelFor(labelRepassword);
 		labelRepassword.setIcon(new ImageIcon(FormAddDocGia.class.getResource("/icons/key.png")));
 		labelRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		labelRepassword.setBounds(20, 215, 100, 16);
+		labelRepassword.setBounds(20, 210, 100, 16);
 		contentPane.add(labelRepassword);
 		
 		labelErrorPassword = new JLabel("");
 		labelErrorPassword.setForeground(Color.RED);
 		labelErrorPassword.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorPassword.setBounds(120, 155, 150, 16);
+		labelErrorPassword.setBounds(120, 150, 150, 16);
 		contentPane.add(labelErrorPassword);
 		
 		labelErrorRepassword = new JLabel("");
 		labelErrorRepassword.setForeground(Color.RED);
 		labelErrorRepassword.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorRepassword.setBounds(120, 215, 150, 16);
+		labelErrorRepassword.setBounds(120, 210, 150, 16);
 		contentPane.add(labelErrorRepassword);
 		
 		labelErrorFullname = new JLabel("");
 		labelErrorFullname.setForeground(Color.RED);
 		labelErrorFullname.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorFullname.setBounds(120, 275, 150, 16);
+		labelErrorFullname.setBounds(120, 270, 150, 16);
 		contentPane.add(labelErrorFullname);
 		
 		labelErrorAddress = new JLabel("");
 		labelErrorAddress.setForeground(Color.RED);
 		labelErrorAddress.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorAddress.setBounds(410, 275, 150, 16);
+		labelErrorAddress.setBounds(410, 270, 150, 16);
 		contentPane.add(labelErrorAddress);
 		
 		dateChooserBirthday = new JDateChooser();
 		dateChooserBirthday.setDateFormatString("dd/MM/yyyy");
 		dateChooserBirthday.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		dateChooserBirthday.setBounds(310, 115, 160, 25);
+		dateChooserBirthday.setBounds(310, 110, 160, 25);
 		contentPane.add(dateChooserBirthday);
 		
 		labelErrorBirthday = new JLabel("");
 		labelErrorBirthday.setForeground(Color.RED);
 		labelErrorBirthday.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		labelErrorBirthday.setBounds(391, 95, 84, 16);
+		labelErrorBirthday.setBounds(391, 90, 84, 16);
 		contentPane.add(labelErrorBirthday);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setForeground(new Color(160, 160, 160));
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1.setBounds(290, 70, 2, 245);
+		contentPane.add(separator_1);
 	}
 }
