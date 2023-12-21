@@ -36,7 +36,6 @@ public class FormHome extends JFrame {
 	private FormSignIn formSignIn;
 	private FormHome thisForm = this;
 
-	private JPanel panelContent;
 	private PanelBook panelBook;
 	private PanelPhieuMuon panelPhieuMuon;
 

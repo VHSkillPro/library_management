@@ -32,28 +32,31 @@ public class PanelDocGia extends JPanel {
 	private JButton btnDelete;
 	private JButton buttonFind;
 	private JButton buttonAdd;
-
-	private FormEditDocGia formEdit;
-	private PanelDocGia thisPanel = this;
-	private FormFindDocGia formFind;
-	private FormAddDocGia formAdd;
 	private JButton buttonChangePassword;
+
+	private PanelDocGia thisPanel = this;
+	private FormAddDocGia formAdd;
+	private FormFindDocGia formFind;
+	private FormEditDocGia formEdit;
+	private FormChangePasswordDocGia formChangePassword;
 	
 	/**
 	 * Create the panel.
 	 */
 	public PanelDocGia() {
 		createContents();
-		themDocGia();
-		findDocGia();
-		clickRow();
-		reloadTable();
-		changePassword();
-		deleteRow();
+		
+		eventAddDocGia();
+		eventFindDocGia();
+		eventClickRow();
+		eventChangePassword();
+		eventDeleteRow();
+		eventReloadTable();
+		
 		loadTable(DocGiaBo.getAllDocGia());
 	}
 	
-	public void themDocGia() {
+	public void eventAddDocGia() {
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formAdd.setVisible(true);
@@ -61,7 +64,7 @@ public class PanelDocGia extends JPanel {
 		});
 	}
 	
-	public void findDocGia() {
+	public void eventFindDocGia() {
 		buttonFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formFind.setVisible(true);
@@ -69,7 +72,7 @@ public class PanelDocGia extends JPanel {
 		});
 	}
 	
-	private void clickRow() {
+	private void eventClickRow() {
 		tableListDocGia.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -82,7 +85,7 @@ public class PanelDocGia extends JPanel {
 		});
 	}
 	
-	public void changePassword() {
+	public void eventChangePassword() {
 		buttonChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = tableListDocGia.getSelectedRow();
@@ -91,22 +94,15 @@ public class PanelDocGia extends JPanel {
 					JOptionPane.showMessageDialog(null, "Vui lòng chọn độc giả cần đổi mật khẩu", "Thông báo", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
-//					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
-//					if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
-//						if (DocGiaBo.deleteDocGia(maDocGia)) {
-//							JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//							loadTable(DocGiaBo.getAllDocGia());
-//						}
-//						else {
-//							JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
-//						}
-//					}
+					String username = (String) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 5);
+					formChangePassword = new FormChangePasswordDocGia(username);
+					formChangePassword.setVisible(true);
 				}
 			}
 		});
 	}
 	
-	public void deleteRow() {
+	public void eventDeleteRow() {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = tableListDocGia.getSelectedRow();
@@ -130,7 +126,7 @@ public class PanelDocGia extends JPanel {
 		});
 	}
 	
-	public void reloadTable() {
+	public void eventReloadTable() {
 		buttonReload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadTable(DocGiaBo.getAllDocGia());
