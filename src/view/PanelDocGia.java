@@ -200,13 +200,13 @@ public class PanelDocGia extends JPanel {
 		add(btnDelete);
 		
 		buttonReload = new JButton("Làm mới");
-		buttonReload.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/reload.png")));
+		buttonReload.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/refresh.png")));
 		buttonReload.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		buttonReload.setBounds(445, 20, 110, 30);
 		add(buttonReload);
 		
 		buttonChangePassword = new JButton("Đổi mật khẩu");
-		buttonChangePassword.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/key.png")));
+		buttonChangePassword.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/edit.png")));
 		buttonChangePassword.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		buttonChangePassword.setBounds(795, 20, 130, 30);
 		add(buttonChangePassword);

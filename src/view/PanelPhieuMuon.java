@@ -10,41 +10,40 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Font;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import bean.PhieuMuon;
+import bo.DocGiaBo;
 import bo.PhieuMuonBo;
+import bo.ThuThuBo;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 public class PanelPhieuMuon extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable tableListPhieuMuon;
-	private ArrayList<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
-	private PhieuMuonBo phieuMuonBo = new PhieuMuonBo();
 	private FormChiTietPhieuMuon frmChiTietPhieuMuon;
 	private FormTaoPhieuMuon frmTaoPM;
 	private PanelPhieuMuon thisPanel = this;
 	private FormFindPhieuMuon frmFindPM;
+	
 	/**
 	 * Create the panel.
 	 */
 	//main
 	public PanelPhieuMuon() {
 		createContents();
-		listPhieuMuon = phieuMuonBo.getAllPhieuMuon();
-		loadTableListPhieuMuon(listPhieuMuon);
+		loadTableListPhieuMuon(PhieuMuonBo.getAllPhieuMuon());
 	}
 	
 	void loadTableListPhieuMuon(ArrayList<PhieuMuon> PhieuMuons) {
@@ -53,43 +52,24 @@ public class PanelPhieuMuon extends JPanel {
 		tb.addColumn("Ngày mượn");
 		tb.addColumn("Ngày trả");
 		tb.addColumn("Trạng thái");
-		tb.addColumn("Mã đọc giả");
-		tb.addColumn("Mã thủ thư");
+		tb.addColumn("Tên độc giả");
+		tb.addColumn("Tên thủ thư");
+		
 		Object[] oj = new Object[6];
 		for (PhieuMuon pm : PhieuMuons) {
 			oj[0] = pm.getMaPhieuMuon();
 			oj[1] = pm.getNgayMuon();
 			oj[2] = pm.getNgayTra();
 			oj[3] = pm.getTrangThai() ? "Đã trả" : "Chưa trả";
-			oj[4] = pm.getMaDocGia();
-			oj[5] = pm.getMaThuThu();
+			oj[4] = DocGiaBo.getDocGiaByMaDocGia(pm.getMaDocGia()).getHoTen();
+			oj[5] = ThuThuBo.getThuThuByMaThuThu(pm.getMaThuThu()).getHoTen();
 			tb.addRow(oj);
 		}
+		
 		tableListPhieuMuon.setModel(tb);
-		setJTableColumnsWidth(tableListPhieuMuon, 1015, 13, 23.5, 23.5, 13.3, 13.3, 13.3);
+		setJTableColumnsWidth(tableListPhieuMuon, 1015, 15, 20, 20, 15, 20, 20);
 	}
-	void loadTableListPhieuMuon() {
-		DefaultTableModel tb = new DefaultTableModel();
-		tb.addColumn("Mã phiếu mượn");
-		tb.addColumn("Ngày mượn");
-		tb.addColumn("Ngày trả");
-		tb.addColumn("Trạng thái");
-		tb.addColumn("Mã đọc giả");
-		tb.addColumn("Mã thủ thư");
-		Object[] oj = new Object[6];
-		listPhieuMuon = PhieuMuonBo.getAllPhieuMuon();
-		for (PhieuMuon pm : listPhieuMuon) {
-			oj[0] = pm.getMaPhieuMuon();
-			oj[1] = pm.getNgayMuon();
-			oj[2] = pm.getNgayTra();
-			oj[3] = pm.getTrangThai() ? "Đã trả" : "Chưa trả";
-			oj[4] = pm.getMaDocGia();
-			oj[5] = pm.getMaThuThu();
-			tb.addRow(oj);
-		}
-		tableListPhieuMuon.setModel(tb);
-		setJTableColumnsWidth(tableListPhieuMuon, 1015, 13, 23.5, 23.5, 13.3, 13.3, 13.3);
-	}
+	
 	private void createContents() {
 		setBounds(new Rectangle(0, 0, 1035, 680));
 		setLayout(null);
@@ -99,6 +79,7 @@ public class PanelPhieuMuon extends JPanel {
 		add(scrollPane);
 		
 		tableListPhieuMuon = new JTable() {
+			private static final long serialVersionUID = 1L;
 			public boolean isCellEditable(int row, int column) {                
                 return false;               
 			};
@@ -114,10 +95,11 @@ public class PanelPhieuMuon extends JPanel {
 				if (e.getClickCount() == 2 && !e.isConsumed()) {
 					e.consume();
 					int row = tableListPhieuMuon.getSelectedRow();
-					TableModel md = tableListPhieuMuon.getModel();
-					Integer ma = Integer.parseInt(md.getValueAt(row, 0).toString());
-					Integer maKH = Integer.parseInt(md.getValueAt(row, 4).toString());
-					Integer maTT = Integer.parseInt(md.getValueAt(row, 5).toString());
+					Integer ma = Integer.parseInt(tableListPhieuMuon.getValueAt(row, 0).toString());
+					PhieuMuon pm = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(ma);
+					Integer maKH = pm.getMaDocGia();
+					Integer maTT = pm.getMaThuThu();
+					
 					frmChiTietPhieuMuon = new FormChiTietPhieuMuon(ma, maKH, maTT);
 					frmChiTietPhieuMuon.setVisible(true);
 				}
@@ -127,12 +109,13 @@ public class PanelPhieuMuon extends JPanel {
 		scrollPane.setColumnHeaderView(tableListPhieuMuon);
 		scrollPane.setViewportView(tableListPhieuMuon);
 		
-		JLabel labelTitle = new JLabel("Quản lý phiếu mượn");
+		JLabel labelTitle = new JLabel("QUẢN LÝ PHIẾU MƯỢN");
 		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 25));
-		labelTitle.setBounds(10, 11, 400, 40);
+		labelTitle.setBounds(50, 15, 300, 40);
 		add(labelTitle);
 		
-		JButton buttonAdd = new JButton("Tạo phiếu mượn");
+		JButton buttonAdd = new JButton("Thêm");
+		buttonAdd.setIcon(new ImageIcon(PanelPhieuMuon.class.getResource("/icons/plus-symbol-button.png")));
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmTaoPM = new FormTaoPhieuMuon(thisPanel);
@@ -140,31 +123,33 @@ public class PanelPhieuMuon extends JPanel {
 			}
 		});
 		
-		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(553, 21, 141, 30);
+		buttonAdd.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonAdd.setBounds(585, 20, 100, 30);
 		add(buttonAdd);
 		
 		JButton btnDelete = new JButton("Xoá");
+		btnDelete.setIcon(new ImageIcon(PanelPhieuMuon.class.getResource("/icons/trash.png")));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = tableListPhieuMuon.getSelectedRow();
 				if (row == -1) {
-					JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu muốn xóa !");
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu mượn muốn xóa !", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					if(JOptionPane.showConfirmDialog(btnDelete, "Xác nhận xóa !") == 0) {
 						TableModel md = tableListPhieuMuon.getModel();
 						PhieuMuon pm = PhieuMuonBo.getPhieuMuonByMaPhieuMuon(Integer.valueOf(md.getValueAt(row, 0).toString()));
 						PhieuMuonBo.deletePhieuMuon(pm);
-						loadTableListPhieuMuon();
+						loadTableListPhieuMuon(PhieuMuonBo.getAllPhieuMuon());
 					}
 				}
 			}
 		});
-		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnDelete.setBounds(925, 20, 100, 30);
+		btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnDelete.setBounds(935, 20, 90, 30);
 		add(btnDelete);
 		
 		JButton btnEdit = new JButton("Chỉnh sửa");
+		btnEdit.setIcon(new ImageIcon(PanelPhieuMuon.class.getResource("/icons/edit.png")));
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = tableListPhieuMuon.getSelectedRow();
@@ -177,20 +162,32 @@ public class PanelPhieuMuon extends JPanel {
 				}
 			}
 		});
-		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnEdit.setBounds(815, 21, 100, 30);
+		btnEdit.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnEdit.setBounds(815, 20, 110, 30);
 		add(btnEdit);
 		
 		JButton btnSearch = new JButton("Tìm kiếm");
+		btnSearch.setIcon(new ImageIcon(PanelPhieuMuon.class.getResource("/icons/search.png")));
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmFindPM = new FormFindPhieuMuon(thisPanel);
 				frmFindPM.setVisible(true);
 			}
 		});
-		btnSearch.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnSearch.setBounds(704, 21, 100, 30);
+		btnSearch.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnSearch.setBounds(695, 20, 110, 30);
 		add(btnSearch);
+		
+		JButton buttonReload = new JButton("Làm mới");
+		buttonReload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				loadTableListPhieuMuon(PhieuMuonBo.getAllPhieuMuon());
+			}
+		});
+		buttonReload.setIcon(new ImageIcon(PanelPhieuMuon.class.getResource("/icons/refresh.png")));
+		buttonReload.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonReload.setBounds(465, 20, 110, 30);
+		add(buttonReload);
 	}
 	
 	public void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {

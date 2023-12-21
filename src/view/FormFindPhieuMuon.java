@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Date;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
 public class FormFindPhieuMuon extends JFrame {
 
@@ -64,7 +66,7 @@ public class FormFindPhieuMuon extends JFrame {
 		setResizable(false);
 		setTitle("Tìm kiếm phiếu mượn - Phần mềm quản lý thư viện");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 400, 335);
+		setBounds(100, 100, 400, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -72,83 +74,91 @@ public class FormFindPhieuMuon extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel labelTitle = new JLabel("Tìm kiếm phiếu mượn");
-		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 19));
-		labelTitle.setBounds(90, 10, 211, 30);
+		labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		labelTitle.setBounds(90, 15, 220, 30);
 		contentPane.add(labelTitle);
 		
 		JLabel labelMaPhieuMuon = new JLabel("Mã phiếu mượn");
-		labelMaPhieuMuon.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelMaPhieuMuon.setBounds(20, 60, 100, 16);
+		labelMaPhieuMuon.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/id-card.png")));
+		labelMaPhieuMuon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelMaPhieuMuon.setBounds(20, 80, 120, 16);
 		contentPane.add(labelMaPhieuMuon);
 		
 		inputMaPhieuMuon = new JTextField();
 		inputMaPhieuMuon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		inputMaPhieuMuon.setColumns(10);
-		inputMaPhieuMuon.setBounds(20, 80, 152, 25);
+		inputMaPhieuMuon.setBounds(20, 100, 240, 25);
 		contentPane.add(inputMaPhieuMuon);
 		
 		dateChooserdateFrom = new JDateChooser();
 		dateChooserdateFrom.setDateFormatString("dd/MM/yyyy");
-		dateChooserdateFrom.setBounds(20, 140, 152, 25);
+		dateChooserdateFrom.setBounds(20, 160, 155, 25);
 		contentPane.add(dateChooserdateFrom);
 		
 		JLabel labeldateFrom = new JLabel("Thời gian mượn");
-		labeldateFrom.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labeldateFrom.setBounds(20, 116, 84, 25);
+		labeldateFrom.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/deadline.png")));
+		labeldateFrom.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labeldateFrom.setBounds(20, 140, 120, 16);
 		contentPane.add(labeldateFrom);
 		
 		JLabel lbln = new JLabel("đến");
-		lbln.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lbln.setBounds(182, 140, 30, 25);
+		lbln.setHorizontalAlignment(SwingConstants.CENTER);
+		lbln.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		lbln.setBounds(180, 160, 30, 25);
 		contentPane.add(lbln);
 		
 		dateChooserdateTo = new JDateChooser();
 		dateChooserdateTo.setDateFormatString("dd/MM/yyyy");
-		dateChooserdateTo.setBounds(216, 140, 144, 25);
+		dateChooserdateTo.setBounds(215, 160, 155, 25);
 		contentPane.add(dateChooserdateTo);
 		
 		JLabel labelTrangThai = new JLabel("Trạng thái");
-		labelTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelTrangThai.setBounds(210, 60, 134, 16);
+		labelTrangThai.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/check-list.png")));
+		labelTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelTrangThai.setBounds(270, 80, 100, 16);
 		contentPane.add(labelTrangThai);
 		
 		comboTrangThai = new JComboBox<String>();
 		comboTrangThai.setModel(new DefaultComboBoxModel<String>(new String[] {"Tất cả", "Chưa trả", "Đã trả"}));
 		comboTrangThai.setSelectedIndex(0);
 		comboTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		comboTrangThai.setBounds(210, 80, 150, 25);
+		comboTrangThai.setBounds(270, 100, 100, 25);
 		contentPane.add(comboTrangThai);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(160, 160, 160));
-		separator.setBounds(20, 47, 340, 2);
+		separator.setBounds(20, 60, 350, 2);
 		contentPane.add(separator);
 		
 		JLabel labelMaThuThu = new JLabel("Mã thủ thư");
-		labelMaThuThu.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelMaThuThu.setBounds(20, 181, 70, 16);
+		labelMaThuThu.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/user.png")));
+		labelMaThuThu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelMaThuThu.setBounds(20, 200, 100, 16);
 		contentPane.add(labelMaThuThu);
 		
 		inputMaThuThu = new JTextField();
 		inputMaThuThu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		inputMaThuThu.setColumns(10);
-		inputMaThuThu.setBounds(20, 201, 152, 25);
+		inputMaThuThu.setBounds(20, 220, 170, 25);
 		contentPane.add(inputMaThuThu);
 		
 		JLabel labelMaDocGia = new JLabel("Mã đọc giả");
-		labelMaDocGia.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		labelMaDocGia.setBounds(216, 181, 70, 16);
+		labelMaDocGia.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/user.png")));
+		labelMaDocGia.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		labelMaDocGia.setBounds(200, 200, 100, 16);
 		contentPane.add(labelMaDocGia);
 		
 		inputMaDocGia = new JTextField();
 		inputMaDocGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		inputMaDocGia.setColumns(10);
-		inputMaDocGia.setBounds(216, 201, 144, 25);
+		inputMaDocGia.setBounds(200, 220, 170, 25);
 		contentPane.add(inputMaDocGia);
 		
 		buttonFind = new JButton("Tìm kiếm");
-		buttonFind.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		buttonFind.setBounds(134, 255, 116, 30);
+		buttonFind.setIcon(new ImageIcon(FormFindPhieuMuon.class.getResource("/icons/search.png")));
+		buttonFind.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		buttonFind.setBounds(130, 260, 140, 35);
 		contentPane.add(buttonFind);
 	}
 	

@@ -2,10 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.SystemColor;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import bean.PhieuMuon;
@@ -26,21 +22,26 @@ import utils.ValidateForm;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 import bo.DocGiaBo;
+import javax.swing.SwingConstants;
 
 public class FormTaoPhieuMuon extends JFrame {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private FormTaoPhieuMuon thisFrm = this;
 	private JPanel contentPane;
 	private PanelPhieuMuon parent;
 	private ArrayList<String> lableMess = new ArrayList<String>();
 	private ArrayList<JLabel> lableError = new ArrayList<JLabel> ();
 	private ArrayList<ValidateForm<String>> validateForm = new ArrayList<ValidateForm<String>>();
-	JLabel lblErrorMaTT, lblErrorMaDocGia;
-	/**
-	 * Launch the application.
-	 */
+	
+	JLabel lblErrorMaTT;
+	JLabel lblErrorMaDocGia;
 
 	/**
 	 * Create the frame.
@@ -52,7 +53,7 @@ public class FormTaoPhieuMuon extends JFrame {
 		setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 453, 318);
+		setBounds(100, 100, 350, 290);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -60,46 +61,49 @@ public class FormTaoPhieuMuon extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lbTaoHD = new JLabel("Tạo hóa đơn");
-		lbTaoHD.setFont(new Font("Segoe UI", Font.BOLD, 21));
-		lbTaoHD.setBounds(150, 11, 140, 50);
+		lbTaoHD.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTaoHD.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		lbTaoHD.setBounds(105, 15, 140, 30);
 		contentPane.add(lbTaoHD);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 70, 417, 2);
+		separator.setForeground(new Color(160, 160, 160));
+		separator.setBounds(20, 60, 300, 2);
 		contentPane.add(separator);
 		
-		JLabel lbMaTT = new JLabel("Nhập mã thủ thư");
+		JLabel lbMaTT = new JLabel("Mã thủ thư");
 		lbMaTT.setLabelFor(lbMaTT);
 		lbMaTT.setIcon(new ImageIcon(FormSignIn.class.getResource("/icons/user.png")));
 		lbMaTT.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lbMaTT.setBounds(50, 90, 126, 16);
+		lbMaTT.setBounds(20, 80, 100, 16);
 		contentPane.add(lbMaTT);
 		
 		JTextField txtMaTT = new JTextField();
 		txtMaTT.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		txtMaTT.setBounds(50, 110, 334, 25);
+		txtMaTT.setBounds(20, 100, 300, 25);
 		contentPane.add(txtMaTT);
 		txtMaTT.setColumns(10);
 		
-		JLabel lbMaKH = new JLabel("Nhập mã đọc giả");
+		JLabel lbMaKH = new JLabel("Mã đọc giả");
 		lbMaKH.setIcon(new ImageIcon(FormSignIn.class.getResource("/icons/user.png")));
 		lbMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lbMaKH.setBounds(50, 150, 132, 16);
+		lbMaKH.setBounds(20, 140, 100, 16);
 		contentPane.add(lbMaKH);
 		
 		
 		JTextField txtMaKH = new JTextField();
 		lbMaKH.setLabelFor(txtMaKH);
 		txtMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		txtMaKH.setBounds(50, 170, 334, 25);
+		txtMaKH.setBounds(20, 160, 300, 25);
 		contentPane.add(txtMaKH);
 	
-		JButton buttonSignIn = new JButton("Xác nhận");
+		JButton buttonSignIn = new JButton("Thêm");
 		buttonSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					lableMess.set(0, validateForm.get(0).validate(txtMaTT.getText()));
 					lableMess.set(1, validateForm.get(1).validate(txtMaKH.getText()));
+					
 					boolean ok = true;
 					for (int i = 0; i < 2; i++) {
 						if (lableMess.get(i) != null) {
@@ -110,13 +114,14 @@ public class FormTaoPhieuMuon extends JFrame {
 							lableError.get(i).setVisible(false);
 						}
 					}
+					
 					if (ok) {
 						thisFrm.setVisible(false);
 						int maTT = Integer.parseInt(txtMaTT.getText().toString());
 						int maKH = Integer.parseInt(txtMaKH.getText().toString());
 						//				labelMess.get(0)buttonSignIn;
 						PhieuMuonBo.insertPhieuMuon(new PhieuMuon(0, null, null, false, maKH, maTT));
-						pr.loadTableListPhieuMuon();
+						parent.loadTableListPhieuMuon(PhieuMuonBo.getAllPhieuMuon());
 						new FormChinhSuaPhieuMuon(PhieuMuonBo.getLastestInsert(), pr).setVisible(true);
 					}
 				} catch (Exception e2) {
@@ -125,22 +130,24 @@ public class FormTaoPhieuMuon extends JFrame {
 				}
 			}
 		});
-		buttonSignIn.setIcon(new ImageIcon(FormSignIn.class.getResource("/icons/log-in.png")));
+		buttonSignIn.setIcon(new ImageIcon(FormTaoPhieuMuon.class.getResource("/icons/plus-symbol-button.png")));
 		buttonSignIn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		buttonSignIn.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		buttonSignIn.setBounds(129, 217, 175, 40);
+		buttonSignIn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		buttonSignIn.setBounds(120, 200, 110, 35);
 		contentPane.add(buttonSignIn);
 		
 		lblErrorMaTT = new JLabel("");
-		lblErrorMaTT.setBounds(190, 92, 194, 16);
-		lblErrorMaTT.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		lblErrorMaTT.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblErrorMaTT.setBounds(120, 80, 200, 16);
+		lblErrorMaTT.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblErrorMaTT.setVisible(false);
 		lblErrorMaTT.setForeground(Color.RED);
 		contentPane.add(lblErrorMaTT);
 		
 		lblErrorMaDocGia = new JLabel("");
-		lblErrorMaDocGia.setBounds(192, 152, 194, 16);
-		lblErrorMaDocGia.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		lblErrorMaDocGia.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblErrorMaDocGia.setBounds(120, 140, 200, 16);
+		lblErrorMaDocGia.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		lblErrorMaDocGia.setVisible(false);
 		lblErrorMaDocGia.setForeground(Color.RED);
 		contentPane.add(lblErrorMaDocGia);
@@ -154,11 +161,12 @@ public class FormTaoPhieuMuon extends JFrame {
 			validateForm.add(new ValidateForm<String>());
 			lableMess.add(null);
 		}
-		validateForm.get(0).addElement(new ValidateElement<String>("Vui lòng nhập mã thủ thư !", str -> Validate.isExist(str)));
-		validateForm.get(0).addElement(new ValidateElement<String>("Mã thủ thư chỉ bao gồm các số từ [0..9]", str-> Validate.isNumber(str)));
-		validateForm.get(0).addElement(new ValidateElement<String>("Mã thủ thư không tồn tại !", str -> Validate.isNumber(str) && ThuThuBo.getThuThuByMaThuThu(Integer.valueOf(str)) != null));
-		validateForm.get(1).addElement(new ValidateElement<String>("Vui lòng nhập mã đọc giả !", str -> Validate.isExist(str)));
-		validateForm.get(1).addElement(new ValidateElement<String>("Mã đọc giả chỉ bao gồm các số từ [0..9]", str-> Validate.isNumber(str)));
-		validateForm.get(1).addElement(new ValidateElement<String>("Mã đọc giả không tồn tại !", str -> Validate.isNumber(str) && DocGiaBo.getDocGiaByMaDocGia(Integer.valueOf(str)) != null));
+		
+		validateForm.get(0).addElement(new ValidateElement<String>("Vui lòng nhập mã thủ thư", str -> Validate.isExist(str)));
+		validateForm.get(0).addElement(new ValidateElement<String>("Mã thủ thư chỉ gồm các số từ [0..9]", str-> Validate.isNumber(str)));
+		validateForm.get(0).addElement(new ValidateElement<String>("Mã thủ thư không tồn tại", str -> Validate.isNumber(str) && ThuThuBo.getThuThuByMaThuThu(Integer.valueOf(str)) != null));
+		validateForm.get(1).addElement(new ValidateElement<String>("Vui lòng nhập mã đọc giả", str -> Validate.isExist(str)));
+		validateForm.get(1).addElement(new ValidateElement<String>("Mã đọc giả chỉ gồm các số từ [0..9]", str-> Validate.isNumber(str)));
+		validateForm.get(1).addElement(new ValidateElement<String>("Mã đọc giả không tồn tại", str -> Validate.isNumber(str) && DocGiaBo.getDocGiaByMaDocGia(Integer.valueOf(str)) != null));
 	}
 }
