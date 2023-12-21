@@ -197,6 +197,7 @@ public class FormSignUp extends JFrame {
 		
 		JLabel labelUsername = new JLabel("Username");
 		labelUsername.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/user.png")));
+		
 		labelUsername.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		labelUsername.setBounds(20, 95, 100, 16);
 		contentPane.add(labelUsername);

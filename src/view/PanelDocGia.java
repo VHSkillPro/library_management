@@ -20,6 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class PanelDocGia extends JPanel {
 
@@ -36,6 +37,7 @@ public class PanelDocGia extends JPanel {
 	private PanelDocGia thisPanel = this;
 	private FormFindDocGia formFind;
 	private FormAddDocGia formAdd;
+	private JButton buttonChangePassword;
 	
 	/**
 	 * Create the panel.
@@ -46,6 +48,7 @@ public class PanelDocGia extends JPanel {
 		findDocGia();
 		clickRow();
 		reloadTable();
+		changePassword();
 		deleteRow();
 		loadTable(DocGiaBo.getAllDocGia());
 	}
@@ -74,6 +77,30 @@ public class PanelDocGia extends JPanel {
 					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
 					formEdit = new FormEditDocGia(maDocGia, thisPanel);
 					formEdit.setVisible(true);
+				}
+			}
+		});
+	}
+	
+	public void changePassword() {
+		buttonChangePassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = tableListDocGia.getSelectedRow();
+				
+				if (selectedRow == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn độc giả cần đổi mật khẩu", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+//					int maDocGia = (int) tableListDocGia.getValueAt(tableListDocGia.getSelectedRow(), 0);
+//					if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
+//						if (DocGiaBo.deleteDocGia(maDocGia)) {
+//							JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//							loadTable(DocGiaBo.getAllDocGia());
+//						}
+//						else {
+//							JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+//						}
+//					}
 				}
 			}
 		});
@@ -117,18 +144,22 @@ public class PanelDocGia extends JPanel {
 		dtm.addColumn("Họ và tên");
 		dtm.addColumn("Giới tính");
 		dtm.addColumn("Ngày sinh");
+		dtm.addColumn("Số điện thoại");
+		dtm.addColumn("Tên đăng nhập");
 		
 		for (DocGia docGia: listDocGia) {
-			Object[] row = new Object[4];
+			Object[] row = new Object[6];
 			row[0] = docGia.getMaDocGia();
 			row[1] = docGia.getHoTen();
 			row[2] = docGia.getGioiTinh() ? "Nam" : "Nữ";
 			row[3] = sdf.format(docGia.getNgaySinh());
+			row[4] = docGia.getSoDienThoai();
+			row[5] = docGia.getUsername();
 			dtm.addRow(row);
 		}
 		
 		tableListDocGia.setModel(dtm);
-		setJTableColumnsWidth(tableListDocGia, 1015, 10, 50, 10, 30);
+		setJTableColumnsWidth(tableListDocGia, 1015, 10, 30, 10, 15, 20, 15);
 	}
 	
 	private void createContents() {
@@ -145,6 +176,7 @@ public class PanelDocGia extends JPanel {
 	            return false;
 	        }
 		};
+		tableListDocGia.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tableListDocGia.setRowHeight(30);
 		scrollPane.setViewportView(tableListDocGia);
 		
@@ -154,24 +186,34 @@ public class PanelDocGia extends JPanel {
 		add(labelTitle);
 		
 		buttonAdd = new JButton("Thêm");
-		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(705, 20, 100, 30);
+		buttonAdd.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/plus-symbol-button.png")));
+		buttonAdd.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonAdd.setBounds(565, 20, 100, 30);
 		add(buttonAdd);
 		
 		buttonFind = new JButton("Tìm kiếm");
-		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonFind.setBounds(815, 20, 100, 30);
+		buttonFind.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/search.png")));
+		buttonFind.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonFind.setBounds(675, 20, 110, 30);
 		add(buttonFind);
 		
 		btnDelete = new JButton("Xoá");
-		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnDelete.setBounds(925, 20, 100, 30);
+		btnDelete.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/trash.png")));
+		btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnDelete.setBounds(935, 20, 90, 30);
 		add(btnDelete);
 		
 		buttonReload = new JButton("Làm mới");
-		buttonReload.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonReload.setBounds(595, 20, 100, 30);
+		buttonReload.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/reload.png")));
+		buttonReload.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonReload.setBounds(445, 20, 110, 30);
 		add(buttonReload);
+		
+		buttonChangePassword = new JButton("Đổi mật khẩu");
+		buttonChangePassword.setIcon(new ImageIcon(PanelDocGia.class.getResource("/icons/key.png")));
+		buttonChangePassword.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonChangePassword.setBounds(795, 20, 130, 30);
+		add(buttonChangePassword);
 		
 		formFind = new FormFindDocGia(thisPanel);
 		formAdd = new FormAddDocGia(thisPanel);
