@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import javax.xml.crypto.Data;
-
 import bean.Book;
 
 //Hiển thị danh sách sách trong kho

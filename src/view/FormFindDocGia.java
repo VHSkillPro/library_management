@@ -174,8 +174,9 @@ public class FormFindDocGia extends JFrame {
 		contentPane.add(inputSoDienThoai);
 		
 		buttonFind = new JButton("Tìm kiếm");
+		buttonFind.setIcon(new ImageIcon(FormFindDocGia.class.getResource("/icons/search.png")));
 		buttonFind.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		buttonFind.setBounds(150, 325, 100, 30);
+		buttonFind.setBounds(140, 325, 120, 30);
 		contentPane.add(buttonFind);
 		
 		lblT = new JLabel("Từ");

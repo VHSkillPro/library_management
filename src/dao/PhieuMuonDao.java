@@ -1,10 +1,10 @@
 package dao;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 
-import bean.Book;
 import bean.PhieuMuon;
 
 public class PhieuMuonDao {

@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Insets;
 
 public class FormHome extends JFrame {
 
@@ -38,11 +39,9 @@ public class FormHome extends JFrame {
 
 	private PanelBook panelBook;
 	private PanelPhieuMuon panelPhieuMuon;
-
-	private PanelAccount panelAccount;
 	private PanelDocGia panelDocGia;
+	private PanelThuThu panelThuThu;
 
-	
 	/**
 	 * Launch the application.
 	 */
@@ -126,69 +125,75 @@ public class FormHome extends JFrame {
 		panelMenu.setLayout(null);
 		
 		JButton buttonMenu1 = new JButton("Sách");
+		buttonMenu1.setBorderPainted(false);
+		buttonMenu1.setMargin(new Insets(2, -43, 2, 14));
+		buttonMenu1.setHorizontalTextPosition(SwingConstants.RIGHT);
+		buttonMenu1.setIconTextGap(15);
+		buttonMenu1.setIcon(new ImageIcon(FormHome.class.getResource("/icons/book32.png")));
 		buttonMenu1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelAccount.setVisible(false);
+				panelThuThu.setVisible(false);
 				panelDocGia.setVisible(false);
 				panelPhieuMuon.setVisible(false);
 				panelBook.setVisible(true);
 			}
 		});
-
-		buttonMenu1.setBorderPainted(false);
 		buttonMenu1.setBackground(new Color(240, 240, 240));
-		buttonMenu1.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		buttonMenu1.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		buttonMenu1.setBounds(0, 100, 230, 50);
 		panelMenu.add(buttonMenu1);
 		
 		JButton buttonMenu2 = new JButton("Phiếu mượn");
+		buttonMenu2.setIcon(new ImageIcon(FormHome.class.getResource("/icons/bill32.png")));
+		buttonMenu2.setIconTextGap(15);
 		buttonMenu2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				panelBook.setVisible(false);
-				panelAccount.setVisible(false);
+				panelThuThu.setVisible(false);
 				panelDocGia.setVisible(false);
 				panelPhieuMuon.setVisible(true);
 			}
 		});
-//		buttonMenu2.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				panelPhieuMuon.setVisible(true);
-//			}
-//		});
 		buttonMenu2.setBorderPainted(false);
 		buttonMenu2.setBackground(new Color(240, 240, 240));
-		buttonMenu2.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		buttonMenu2.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		buttonMenu2.setBounds(0, 150, 230, 50);
 		panelMenu.add(buttonMenu2);
 		
 		JButton buttonMenu3 = new JButton("Độc giả");
+		buttonMenu3.setMargin(new Insets(2, -23, 2, 14));
+		buttonMenu3.setIconTextGap(15);
+		buttonMenu3.setIcon(new ImageIcon(FormHome.class.getResource("/icons/id-card32.png")));
 		buttonMenu3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelBook.setVisible(false);
-				panelAccount.setVisible(false);
+				panelThuThu.setVisible(false);
 				panelPhieuMuon.setVisible(false);
 				panelDocGia.setVisible(true);
 			}
 		});
 		buttonMenu3.setBorderPainted(false);
 		buttonMenu3.setBackground(new Color(240, 240, 240));
-		buttonMenu3.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		buttonMenu3.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		buttonMenu3.setBounds(0, 200, 230, 50);
 		panelMenu.add(buttonMenu3);
 		
-		buttonMenu4 = new JButton("Tài khoản");
+		buttonMenu4 = new JButton("Thủ thư");
+		buttonMenu4.setMargin(new Insets(2, -23, 2, 14));
+		buttonMenu4.setIcon(new ImageIcon(FormHome.class.getResource("/icons/admin32.png")));
+		buttonMenu4.setIconTextGap(15);
 		buttonMenu4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelBook.setVisible(false);
 				panelDocGia.setVisible(false);
 				panelPhieuMuon.setVisible(false);
-				panelAccount.setVisible(true);
+				panelThuThu.setVisible(true);
 			}
 		});
 		buttonMenu4.setBorderPainted(false);
 		buttonMenu4.setBackground(new Color(240, 240, 240));
-		buttonMenu4.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		buttonMenu4.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		buttonMenu4.setBounds(0, 250, 230, 50);
 		panelMenu.add(buttonMenu4);
 		
@@ -210,10 +215,10 @@ public class FormHome extends JFrame {
 		panelPhieuMuon.setVisible(false);
 		contentPane.add(panelPhieuMuon);
 
-		panelAccount = new PanelAccount();
-		panelAccount.setBounds(230, 0, 1035, 680);
-		panelAccount.setVisible(false);
-		contentPane.add(panelAccount);
+		panelThuThu = new PanelThuThu();
+		panelThuThu.setBounds(230, 0, 1035, 680);
+		panelThuThu.setVisible(false);
+		contentPane.add(panelThuThu);
 		
 		panelDocGia = new PanelDocGia();
 		panelDocGia.setBounds(230, 0, 1035, 680);

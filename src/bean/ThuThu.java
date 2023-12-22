@@ -1,9 +1,12 @@
 package bean;
 
+import java.util.Date;
+
 public class ThuThu {
 	private int maThuThu;
 	private String hoTen;
 	private boolean gioiTinh;
+	private Date ngaySinh;
 	private String email;
 	private String soDienThoai;
 	private String diaChi;
@@ -14,11 +17,12 @@ public class ThuThu {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ThuThu(int maThuThu, String hoTen, boolean gioiTinh, String email, String soDienThoai, String diaChi, String username) {
+	public ThuThu(int maThuThu, String hoTen, boolean gioiTinh, Date ngaySinh, String email, String soDienThoai, String diaChi, String username) {
 		super();
 		this.maThuThu = maThuThu;
 		this.hoTen = hoTen;
 		this.gioiTinh = gioiTinh;
+		this.setNgaySinh(ngaySinh);
 		this.email = email;
 		this.soDienThoai = soDienThoai;
 		this.diaChi = diaChi;
@@ -47,6 +51,14 @@ public class ThuThu {
 
 	public void setGioiTinh(boolean gioiTinh) {
 		this.gioiTinh = gioiTinh;
+	}
+	
+	public Date getNgaySinh() {
+		return ngaySinh;
+	}
+
+	public void setNgaySinh(Date ngaySinh) {
+		this.ngaySinh = ngaySinh;
 	}
 	
 	public String getEmail() {
