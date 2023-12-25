@@ -18,25 +18,12 @@ public class BookBo {
 	static public Boolean updateBook(Book books) {
 		return BookDao.updateBook(books);
 	}
-	static public ArrayList<Book> findbyBookName(String name) {
+	static public Book findbyBookName(String name) {
 		return BookDao.findByBookName(name);
 	}
 	static public Book findByBookId(int bookId) {
 		return BookDao.findByBookId(bookId);
 	}
-	static public ArrayList<Book> findBookbyAuthor(String tacGia) {
-		return BookDao.findBookbyAuthor(tacGia);
-	}
-	static public ArrayList<Book> findBookbyNXB(String NXB) {
-		return BookDao.findBookbyNXB(NXB);
-	}
-	static public ArrayList<Book> findBookbyType(String type) {
-		return BookDao.findBookbyType(type);
-	}
-	static public ArrayList<Book> SearchBook(String maSach, String tenSach, String tacGia, String NXB, String theLoai) {
-		return BookDao.SearchBook(maSach, tenSach, tacGia, NXB, theLoai);
-	}
-	
 	static public int findPosInArraybyId(int bookId, ArrayList<Book> lst) {
 		int pos = -1;
 		for (int i = 0; i < lst.size(); i++) {

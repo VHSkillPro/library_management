@@ -1,11 +1,10 @@
 package view;
 
-import java.util.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import bean.Account;
-import bo.AccountBo;
 import dao.Database;
-import utils.SHA256;
 
 public class Debug {
 
@@ -47,6 +46,23 @@ public class Debug {
 //		else {
 //			System.out.printf("Xoa tai khoan that bai\n");
 //		}
+//		
+//		try {
+//			String sql = "delete from DocGia where maDocGia = ?";
+//			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+//			stmt.setInt(1, -1);
+//			ResultSet rs = stmt.executeQuery();
+//			
+//			int cnt = 0;
+//			while (rs.next()) {
+//				cnt++;
+//			}
+//			
+//			System.out.print(cnt);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
 	}
 
 }

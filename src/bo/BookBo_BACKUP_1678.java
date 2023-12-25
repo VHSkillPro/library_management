@@ -24,6 +24,7 @@ public class BookBo {
 	static public Book findByBookId(int bookId) {
 		return BookDao.findByBookId(bookId);
 	}
+<<<<<<< HEAD
 	static public ArrayList<Book> findBookbyAuthor(String tacGia) {
 		return BookDao.findBookbyAuthor(tacGia);
 	}
@@ -35,8 +36,7 @@ public class BookBo {
 	}
 	static public ArrayList<Book> SearchBook(String maSach, String tenSach, String tacGia, String NXB, String theLoai) {
 		return BookDao.SearchBook(maSach, tenSach, tacGia, NXB, theLoai);
-	}
-	
+=======
 	static public int findPosInArraybyId(int bookId, ArrayList<Book> lst) {
 		int pos = -1;
 		for (int i = 0; i < lst.size(); i++) {
@@ -46,5 +46,6 @@ public class BookBo {
 			}
 		}
 		return pos;
+>>>>>>> origin/develop
 	}
 }
