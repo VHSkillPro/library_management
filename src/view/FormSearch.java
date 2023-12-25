@@ -106,30 +106,12 @@ public class FormSearch extends JFrame {
 				String tacGia = txtTacGia.getText();
 				String NXB = txtNhaXuatBan.getText();
 				String theLoai = txtTheLoai.getText();
-				ArrayList<Book> lst = new ArrayList<Book>();
-				Boolean ok = false;
-				if (!maSach.isEmpty()) {
-					Integer masach = Integer.parseInt(maSach);
-					Book books = BookBo.findByBookId(masach);
-					if (books != null) lst.add(books);
-				}
-				else if (!tenSach.isEmpty()) {
-					lst = BookBo.findbyBookName(tenSach);
-				}
-				else if (!tacGia.isEmpty()) {
-					lst = BookBo.findBookbyAuthor(tacGia);
-				}
-				else if (!NXB.isEmpty()) {
-					lst = BookBo.findBookbyNXB(NXB);
-				}
-				else if (!theLoai.isEmpty()) {
-					lst = BookBo.findBookbyType(theLoai);
-				}
-				System.out.print(lst.size());
+				ArrayList<Book> lst = BookBo.SearchBook(maSach, tenSach, tacGia, NXB, theLoai);
 				if (lst.size() == 0) {
 					JOptionPane.showMessageDialog(btnTimKiem, "Không tìm thấy sách");
 					return;
 				}
+
 				try {
 					parent.loadTable(lst);
 				} catch (Exception e2) {

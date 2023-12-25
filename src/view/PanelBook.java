@@ -150,7 +150,7 @@ public class PanelBook extends JPanel {
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
 		
-		JButton btnListbook = new JButton("Load");
+		JButton btnListbook = new JButton("Làm mới");
 		btnListbook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {

@@ -205,4 +205,44 @@ public class BookDao {
 		}
 		return null;
 	}
+	
+	static public ArrayList<Book> SearchBook(String maSach, String tenSach, String tacGia, String NXB, String theLoai) {
+		try {
+			String sql = "declare @maSach nvarchar(255),\r\n"
+					+ "	@tenSach nvarchar(255),\r\n"
+					+ "	@tacGia nvarchar(255),\r\n"
+					+ "	@NXB nvarchar(255),\r\n"
+					+ "	@theLoai nvarchar(255)\r\n"
+					+ "\r\n"
+					+ "execute proc_Timkiem\r\n"
+					+ "	@maSach = ?,\r\n"
+					+ "	@tenSach = ?,\r\n"
+					+ "	@tacGia = ?,\r\n"
+					+ "	@NXB = ?,\r\n"
+					+ "	@theLoai = ?";
+			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
+			stmt.setString(1, maSach);
+			stmt.setString(2, tenSach);
+			stmt.setString(3, tacGia);
+			stmt.setString(4, NXB);
+			stmt.setString(5, theLoai);
+			ResultSet rs = stmt.executeQuery();
+			ArrayList<Book> lst = new ArrayList<Book>();
+			while (rs.next()) {
+				Integer masach = Integer.parseInt(rs.getString(1));
+				String tensach = rs.getString(2);
+				String tacgia = rs.getString(3);
+				String nxb = rs.getString(4);
+				Double dongia = Double.parseDouble(rs.getString(5));
+				Integer soluong = Integer.parseInt(rs.getString(6));
+				String theloai = rs.getString(7);
+				Integer maThuThu = Integer.parseInt(rs.getString(8));
+				lst.add(new Book(masach, tensach, tacgia, nxb, dongia, soluong, theloai, maThuThu));
+			}
+			return lst;
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		return null;
+	}
 }

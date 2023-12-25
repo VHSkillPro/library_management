@@ -33,4 +33,7 @@ public class BookBo {
 	static public ArrayList<Book> findBookbyType(String type) {
 		return BookDao.findBookbyType(type);
 	}
+	static public ArrayList<Book> SearchBook(String maSach, String tenSach, String tacGia, String NXB, String theLoai) {
+		return BookDao.SearchBook(maSach, tenSach, tacGia, NXB, theLoai);
+	}
 }
