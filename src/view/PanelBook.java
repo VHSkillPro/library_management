@@ -2,7 +2,6 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -10,18 +9,17 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Font;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import bean.Book;
 import bo.BookBo;
-import utils.ValidateForm;
 
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class PanelBook extends JPanel {
 
@@ -91,6 +89,7 @@ public class PanelBook extends JPanel {
 				return false;
 			}
 		};
+		tableListBook.setRowHeight(30);
 		
 		
 		tableListBook.addMouseListener(new MouseAdapter() {
@@ -107,32 +106,35 @@ public class PanelBook extends JPanel {
 		scrollPane.setViewportView(tableListBook);
 //		scrollPane.setColumnHeaderView(tableListBook);
 		
-		JLabel labelTitle = new JLabel("Quản lý sách trong thư viện");
+		JLabel labelTitle = new JLabel("QUẢN LÝ SÁCH");
 		labelTitle.setFont(new Font("Segoe UI", Font.BOLD, 25));
-		labelTitle.setBounds(10, 11, 400, 40);
+		labelTitle.setBounds(50, 15, 220, 40);
 		add(labelTitle);
 		
 		JButton buttonAdd = new JButton("Thêm");
+		buttonAdd.setIcon(new ImageIcon(PanelBook.class.getResource("/icons/plus-symbol-button.png")));
 		buttonAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 formAddBook.setVisible(true);
 			}
 		});
-		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(649, 21, 100, 30);
+		buttonAdd.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonAdd.setBounds(705, 20, 100, 30);
 		add(buttonAdd);
 		
 		JButton buttonFind = new JButton("Tìm kiếm");
+		buttonFind.setIcon(new ImageIcon(PanelBook.class.getResource("/icons/search.png")));
 		buttonFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				formSearch.setVisible(true);
  			}
 		});
-		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonFind.setBounds(790, 21, 100, 30);
+		buttonFind.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		buttonFind.setBounds(815, 20, 110, 30);
 		add(buttonFind);
 		
 		JButton btnDelete = new JButton("Xoá");
+		btnDelete.setIcon(new ImageIcon(PanelBook.class.getResource("/icons/trash.png")));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int maSach = (int)tableListBook.getValueAt(tableListBook.getSelectedRow(), 0);
@@ -146,11 +148,12 @@ public class PanelBook extends JPanel {
 				}
 			}
 		});
-		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnDelete.setBounds(925, 20, 100, 30);
+		btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnDelete.setBounds(935, 20, 90, 30);
 		add(btnDelete);
 		
 		JButton btnListbook = new JButton("Làm mới");
+		btnListbook.setIcon(new ImageIcon(PanelBook.class.getResource("/icons/refresh.png")));
 		btnListbook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -163,8 +166,8 @@ public class PanelBook extends JPanel {
 		});
 		
 		
-		btnListbook.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnListbook.setBounds(507, 21, 100, 30);
+		btnListbook.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		btnListbook.setBounds(585, 20, 110, 30);
 		add(btnListbook);
 	}
 }

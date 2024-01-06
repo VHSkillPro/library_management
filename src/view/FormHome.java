@@ -33,7 +33,7 @@ public class FormHome extends JFrame {
 	private JButton buttonMenu4;
 	private JButton buttonSignOut;
 	
-	private Account account;
+	public static Account account;
 	private FormSignIn formSignIn;
 	private FormHome thisForm = this;
 
@@ -227,7 +227,7 @@ public class FormHome extends JFrame {
 	}
 	
 	public void setAccount(Account account) {
-		this.account = account;
+		FormHome.account = account;
 		labelUsername.setText(account.getUsername());
 		if (account.getRole() == 1) {
 			labelRole.setText("Thủ thư");
@@ -237,9 +237,5 @@ public class FormHome extends JFrame {
 			labelRole.setText("Quản trị viên");
 			buttonMenu4.setVisible(true);
 		}
-	}
-	
-	public Account getAccount() {
-		return this.account;
 	}
 }

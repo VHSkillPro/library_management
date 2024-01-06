@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,7 +10,6 @@ import bo.BookBo;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Font;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -20,37 +17,26 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class FormUpdate extends JFrame {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7146415031877207122L;
+	
 	private JPanel contentPane;
 	private JTextField txtTenSach;
 	private JTextField txtTacGia;
 	private JTextField txtNhaXuatBan;
 	private JTextField txtDonGia;
 	private JTextField txtSoLuong;
-	private PanelBook parent;
 	private JTextField txtTheLoai;
 	private JTextField txtMaThuThu;
 	private JLabel labelMaSach;
 	private Book books;
-	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					FormUpdate frame = new FormUpdate();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
 	 */
 	public FormUpdate(int maSach, PanelBook parent) {
-		this.parent = parent;
 		this.books = BookBo.findByBookId(maSach); 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 430, 387);
@@ -163,6 +149,7 @@ public class FormUpdate extends JFrame {
 		labelMaSach = new JLabel("");
 		labelMaSach.setBounds(107, 11, 287, 20);
 		contentPane.add(labelMaSach);
+		
 		labelMaSach.setText(Integer.valueOf(books.getMaSach()).toString());
 		txtTenSach.setText(books.getTenSach());
 		txtTacGia.setText(books.getTacGia());
