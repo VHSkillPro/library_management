@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,6 +33,7 @@ public class PanelThuThu extends JPanel {
 	private JButton btnDelete;
 	
 	private PanelThuThu thisPanel = this;
+	private FormAddThuThu formAdd = new FormAddThuThu(thisPanel);
 	private FormFindThuThu formFind = new FormFindThuThu(thisPanel);
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -106,6 +108,11 @@ public class PanelThuThu extends JPanel {
 		add(buttonReload);
 		
 		buttonAdd = new JButton("Thêm");
+		buttonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formAdd.setVisible(true);
+			}
+		});
 		buttonAdd.setIcon(new ImageIcon(PanelThuThu.class.getResource("/icons/plus-symbol-button.png")));
 		buttonAdd.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		buttonAdd.setBounds(565, 20, 100, 30);
@@ -129,6 +136,27 @@ public class PanelThuThu extends JPanel {
 		add(buttonChangePassword);
 		
 		btnDelete = new JButton("Xoá");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = tableListAccount.getSelectedRow();
+				
+				if (selectedRow == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn dữ liệu cần xoá", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					int maThuThu = (int) tableListAccount.getValueAt(tableListAccount.getSelectedRow(), 0);
+					if (JOptionPane.showConfirmDialog(null, "Bạn có muốn xoá ?") == 0) {
+						if (ThuThuBo.deleteThuThu(maThuThu)) {
+							JOptionPane.showMessageDialog(null, "Xoá thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+							loadTable(ThuThuBo.getAllThuThu());
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Xoá thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
+			}
+		});
 		btnDelete.setIcon(new ImageIcon(PanelThuThu.class.getResource("/icons/trash.png")));
 		btnDelete.setSelectedIcon(null);
 		btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 12));

@@ -1,19 +1,14 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import bean.Book;
 import bo.BookBo;
-import utils.Validate;
-import utils.ValidateElement;
 import utils.ValidateForm;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -23,7 +18,11 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class FormAddBook extends JFrame {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4239099567974259157L;
+	
 	private JPanel contentPane;
 	private JTextField txtmaSach;
 	private JTextField txttenSach;
@@ -34,15 +33,12 @@ public class FormAddBook extends JFrame {
 	private JTextField txttheLoai;
 	private JTextField txtMaThuThu;
 	
-	private PanelBook parent;
 	private ArrayList<ValidateForm<String>> validateForm = new ArrayList<ValidateForm<String>>();
 
 	/**
 	 * Create the frame.
 	 */
 	public FormAddBook(PanelBook parent) {
-		this.parent = parent;
-		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 358, 381);
 		contentPane = new JPanel();

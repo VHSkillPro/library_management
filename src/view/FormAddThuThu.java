@@ -5,9 +5,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import bean.Account;
-import bean.DocGia;
+import bean.ThuThu;
 import bo.AccountBo;
-import bo.DocGiaBo;
+import bo.ThuThuBo;
 import utils.SHA256;
 import utils.Validate;
 import utils.ValidateElement;
@@ -34,7 +34,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.toedter.calendar.JDateChooser;
 
-public class FormSignUp extends JFrame {
+public class FormAddThuThu extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -59,14 +59,14 @@ public class FormSignUp extends JFrame {
 	private ArrayList<String> labelMessage = new ArrayList<String>();
 	private ArrayList<ValidateForm<String>> validateForm = new ArrayList<ValidateForm<String>>();
 	
-	private JFrame parent;
-	private FormSignUp thisForm = this;
-	private JDateChooser dateChooser;
+	private PanelThuThu parent;
+	private FormAddThuThu thisForm = this;
+	private JDateChooser dateChooserBirthdate;
 	
 	/**
 	 * Create the frame.
 	 */
-	public FormSignUp(JFrame parent) {
+	public FormAddThuThu(PanelThuThu parent) {
 		this.parent = parent;
 		closeForm();
 		createContents();
@@ -133,7 +133,7 @@ public class FormSignUp extends JFrame {
 					String repassword = String.valueOf(inputRepassword.getPassword()).strip();
 					String hoTen = inputFullName.getText().strip();
 					boolean gioiTinh = String.valueOf(comboGender.getSelectedItem()).equals("Nam") ? true : false;
-					Date ngaySinh = dateChooser.getDate();
+					Date ngaySinh = dateChooserBirthdate.getDate();
 					String email = inputEmail.getText().strip();
 					String soDienThoai = inputPhone.getText().strip();
 					String diaChi = inputAddress.getText().strip();
@@ -164,8 +164,9 @@ public class FormSignUp extends JFrame {
 					
 					if (!haveError) {
 						AccountBo.insertAccount(new Account(username, SHA256.getString(password), 0, new Date()));
-						DocGiaBo.insertDocGia(new DocGia(0, hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username));
-						JOptionPane.showMessageDialog(null, "Đăng ký độc giả thành công");
+						ThuThuBo.insertThuThu(new ThuThu(0, hoTen, gioiTinh, ngaySinh, email, soDienThoai, diaChi, username));
+						JOptionPane.showMessageDialog(null, "Thêm thủ thư thành công");
+						parent.loadTable(ThuThuBo.getAllThuThu());
 						thisForm.dispatchEvent(new WindowEvent(thisForm, WindowEvent.WINDOW_CLOSING));
 					}
 				} catch (Exception e1) {
@@ -177,7 +178,7 @@ public class FormSignUp extends JFrame {
 	
 	private void createContents() {
 		setResizable(false);
-		setTitle("Đăng ký độc giả - Phần mềm quản lý thư viện");
+		setTitle("Thêm thủ thư - Phần mềm quản lý thư viện");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 450);
 		contentPane = new JPanel();
@@ -186,7 +187,7 @@ public class FormSignUp extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel labelSignUp = new JLabel("ĐĂNG KÝ ĐỘC GIẢ");
+		JLabel labelSignUp = new JLabel("THÊM THỦ THƯ");
 		labelSignUp.setFont(new Font("Segoe UI", Font.BOLD, 21));
 		labelSignUp.setBounds(200, 15, 200, 50);
 		contentPane.add(labelSignUp);
@@ -292,7 +293,7 @@ public class FormSignUp extends JFrame {
 		separator.setBounds(20, 75, 540, 2);
 		contentPane.add(separator);
 		
-		buttonSignUp = new JButton("Đăng ký");
+		buttonSignUp = new JButton("Thêm");
 		buttonSignUp.setIcon(new ImageIcon(FormSignUp.class.getResource("/icons/sign-up.png")));
 		buttonSignUp.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		buttonSignUp.setBounds(220, 340, 150, 40);
@@ -355,9 +356,9 @@ public class FormSignUp extends JFrame {
 		labelErrorAddress.setBounds(410, 275, 150, 16);
 		contentPane.add(labelErrorAddress);
 		
-		dateChooser = new JDateChooser(new Date());
-		dateChooser.setDateFormatString("dd/MM/yyyy");
-		dateChooser.setBounds(310, 115, 165, 25);
-		contentPane.add(dateChooser);
+		dateChooserBirthdate = new JDateChooser();
+		dateChooserBirthdate.setDateFormatString("dd/MM/yyyy");
+		dateChooserBirthdate.setBounds(310, 115, 165, 25);
+		contentPane.add(dateChooserBirthdate);
 	}
 }
