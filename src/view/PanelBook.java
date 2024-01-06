@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -13,14 +15,22 @@ import javax.swing.table.DefaultTableModel;
 
 import bean.Book;
 import bo.BookBo;
+import utils.ValidateForm;
 
 import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PanelBook extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTable tableListBook;
-
+	private FormAddBook formAddBook = new FormAddBook(this);
+	private FormSearch formSearch = new FormSearch(this);
+	private PanelBook panelBook = this;
+	private FormUpdate formUpdate;
 	/**
 	 * Create the panel.
 	 */
@@ -65,10 +75,35 @@ public class PanelBook extends JPanel {
 		setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				int row = tableListBook.getSelectedRow();
+//				Book books;
+			}
+		});
 		scrollPane.setBounds(10, 62, 1015, 608);
 		add(scrollPane);
 		
-		tableListBook = new JTable();
+		tableListBook  = new JTable() {
+			private static final long serialVersionUID = 1L;
+			public boolean editCellAt(int row, int colum, java.util.EventObject e) {
+				return false;
+			}
+		};
+		
+		
+		tableListBook.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int maSach = (int)tableListBook.getValueAt(tableListBook.getSelectedRow(), 0);
+					formUpdate = new FormUpdate(maSach, panelBook);
+					formUpdate.setVisible(true);
+					
+				}
+			}
+		});
 		scrollPane.setViewportView(tableListBook);
 //		scrollPane.setColumnHeaderView(tableListBook);
 		
@@ -78,23 +113,58 @@ public class PanelBook extends JPanel {
 		add(labelTitle);
 		
 		JButton buttonAdd = new JButton("Thêm");
+		buttonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 formAddBook.setVisible(true);
+			}
+		});
 		buttonAdd.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonAdd.setBounds(595, 20, 100, 30);
+		buttonAdd.setBounds(649, 21, 100, 30);
 		add(buttonAdd);
 		
 		JButton buttonFind = new JButton("Tìm kiếm");
+		buttonFind.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				formSearch.setVisible(true);
+ 			}
+		});
 		buttonFind.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		buttonFind.setBounds(705, 20, 100, 30);
+		buttonFind.setBounds(790, 21, 100, 30);
 		add(buttonFind);
 		
 		JButton btnDelete = new JButton("Xoá");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int maSach = (int)tableListBook.getValueAt(tableListBook.getSelectedRow(), 0);
+				Book books = BookBo.findByBookId(maSach);
+				BookBo.deleteBook(books);
+				try {
+					ArrayList<Book> lst = BookBo.getAllBook();
+					loadTable(lst);
+				} catch (Exception e2) {
+					e2.getStackTrace();
+				}
+			}
+		});
 		btnDelete.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnDelete.setBounds(925, 20, 100, 30);
 		add(btnDelete);
 		
-		JButton btnEdit = new JButton("Chỉnh sửa");
-		btnEdit.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnEdit.setBounds(815, 20, 100, 30);
-		add(btnEdit);
+		JButton btnListbook = new JButton("Làm mới");
+		btnListbook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ArrayList<Book> lst = BookBo.getAllBook();
+					loadTable(lst);
+				} catch (Exception e2) {
+					e2.getStackTrace();
+				}
+			}
+		});
+		
+		
+		btnListbook.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnListbook.setBounds(507, 21, 100, 30);
+		add(btnListbook);
 	}
 }

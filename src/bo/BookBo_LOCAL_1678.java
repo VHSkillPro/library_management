@@ -36,15 +36,4 @@ public class BookBo {
 	static public ArrayList<Book> SearchBook(String maSach, String tenSach, String tacGia, String NXB, String theLoai) {
 		return BookDao.SearchBook(maSach, tenSach, tacGia, NXB, theLoai);
 	}
-	
-	static public int findPosInArraybyId(int bookId, ArrayList<Book> lst) {
-		int pos = -1;
-		for (int i = 0; i < lst.size(); i++) {
-			if (Integer.valueOf(lst.get(i).getMaSach()) == bookId) {
-				pos = i;
-				break;
-			}
-		}
-		return pos;
-	}
 }
