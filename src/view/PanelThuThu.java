@@ -130,6 +130,20 @@ public class PanelThuThu extends JPanel {
 		add(buttonFind);
 		
 		buttonChangePassword = new JButton("Đổi mật khẩu");
+		buttonChangePassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = tableListAccount.getSelectedRow();
+				
+				if (selectedRow == -1) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn tài khoản cần đổi mật khẩu", "Thông báo", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					String username = (String) tableListAccount.getValueAt(tableListAccount.getSelectedRow(), 6);
+					(new FormChangePasswordThuThu(username)).setVisible(true);
+				}
+				
+			}
+		});
 		buttonChangePassword.setIcon(new ImageIcon(PanelThuThu.class.getResource("/icons/edit.png")));
 		buttonChangePassword.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		buttonChangePassword.setBounds(795, 20, 130, 30);

@@ -1,9 +1,5 @@
 package view;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import dao.Database;
 
 public class Debug {

@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-import javax.xml.crypto.Data;
 
 import bean.Book;
 
@@ -95,18 +94,7 @@ public class BookDao {
 	}
 	static public Boolean updateBook(Book books) {
 		try {
-			
-			
-			String sql = "declare @maSach int,\r\n"
-					+ "	@tenSach nvarchar(255),\r\n"
-					+ "	@tacGia nvarchar(255),\r\n"
-					+ "	@nhaXuatBan nvarchar(255),\r\n"
-					+ "	@donGia money,\r\n"
-					+ "	@soLuong int,\r\n"
-					+ "	@theLoai nvarchar(255),\r\n"
-					+ "	@maThuThu int\r\n"
-					+ "\r\n"
-					+ "execute proc_Them\r\n"
+			String sql = "execute proc_ChinhSua\r\n"
 					+ "	@maSach = ?,\r\n"
 					+ "	@tenSach = ?,\r\n"
 					+ "	@tacGia = ?,\r\n"
@@ -115,15 +103,16 @@ public class BookDao {
 					+ "	@soLuong = ?,\r\n"
 					+ "	@theLoai = ?,\r\n"
 					+ "	@maThuThu = ?";
+			
 			PreparedStatement stmt = Database.getConnection().prepareStatement(sql);
-			stmt.setString(1, books.getTenSach());
-			stmt.setString(2, books.getTacGia());
-			stmt.setString(3,  books.getNhaXuatBan());
-			stmt.setDouble(4, books.getDonGia());
-			stmt.setInt(5, books.getSoLuong());
-			stmt.setString(6, books.getTheLoai());
-			stmt.setInt(7, books.getMaThuThu());
-			stmt.setInt(8, books.getMaSach());
+			stmt.setInt(1, books.getMaSach());
+			stmt.setString(2, books.getTenSach());
+			stmt.setString(3, books.getTacGia());
+			stmt.setString(4,  books.getNhaXuatBan());
+			stmt.setDouble(5, books.getDonGia());
+			stmt.setInt(6, books.getSoLuong());
+			stmt.setString(7, books.getTheLoai());
+			stmt.setInt(8, books.getMaThuThu());
 			stmt.executeUpdate();
 			return true;
 		} catch (Exception e) {
